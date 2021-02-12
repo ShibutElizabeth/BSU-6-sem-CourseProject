@@ -1,0 +1,42 @@
+﻿@model Alia.Models.Item
+@{
+    ViewBag.Title = Model.ItemName;
+}
+<div class="card">
+    <div class="row">
+        <div class="col-lg-4 p-0">
+            @if (Model.BigImageData != null)
+            {
+                <img class="card-img-top" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.BigImageData))" alt="Card image cap" />
+            }
+        </div>
+        <div class="col-lg-8 justify-content-lg-between">
+            <div class="row justify-content-lg-between">
+                <div>
+                    <h5 class="card-title "><strong>@Model.ItemName</strong></h5>
+                    <h6 class="card-title "><strong><span class="icon-layers mr-2 icons-color"></span>  @Model.Category.CategoryName</strong></h6>
+                    <h6 class="card-text"><span class="float-left icon-my_location mr-2 icons-color"></span>  @Model.Locality.LocalityName</h6>
+                </div>
+                <div>
+                    <p class="card-text m-0">@Model.CreatedDate.ToString("dd.MM.yyyy")</p>
+                </div>
+            </div>
+            <p class="card-text mt-3">@Model.Description</p>
+            <div class="card-job-footer">
+                <div>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+                <div>
+                    <h5 class="card-text m-0">
+                        <strong>
+                            @if (Model.Price != null)
+                            {
+                                @Model.Price
+                            }  $
+                        </strong>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

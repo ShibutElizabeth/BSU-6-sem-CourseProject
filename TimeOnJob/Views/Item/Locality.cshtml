@@ -1,0 +1,42 @@
+﻿@model Alia.ViewModels.LocalitiesListViewModel
+@{
+    ViewData["Title"] = "Locality";
+}
+
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-body">
+            <form asp-action="Locality" asp-controller="Item" method="get">
+                <div class="form-inline form-group">
+                    <label class="control-label">Search: </label>
+                    @Html.TextBox("localityName", Model.Name, htmlAttributes: new { @class = "form-control" })
+
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a class="btn btn-primary" asp-action="LocalityCreate">Create locality</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<table class="table table-sm table-hover">
+    <thead class="thead-light">
+        <tr><th>id</th><th>name</th><th>region id</th><th>region name</th></tr>
+    </thead>
+    @foreach (var item in Model.Localities)
+    {
+        <tbody>
+            <tr>
+                <td>@item.LocalityId</td>
+                <td>@item.LocalityName</td>
+                <td>@item.RegionId</td>
+                <td>@item.Region.RegionName</td>
+                <td>
+                    @*<a asp-action="LocalityDetails" asp-controller="Job" asp-route-id="@item.LocalityId">Details</a> |*@
+                    <a class="btn btn-success" asp-action="LocalityEdit" asp-controller="Item" asp-route-id="@item.LocalityId">Edit</a> |
+                    <a class="btn btn-danger" asp-action="LocalityDelete" asp-controller="Item" asp-route-id="@item.LocalityId">Delete</a> |
+                </td>
+            </tr>
+        </tbody>
+    }
+</table>
+

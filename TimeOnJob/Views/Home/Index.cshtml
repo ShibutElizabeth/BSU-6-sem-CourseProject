@@ -1,0 +1,411 @@
+﻿@model Alia.ViewModels.ItemListViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="hero-wrap js-fullheight" style="background-image: url('/images//bg_2.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-start" data-scrollax-parent="true">
+            <div class="col-xl-10 ftco-animate mb-5 pb-5" data-scrollax=" properties: { translateY: '70%' }">
+                <p class="mb-4 mt-5 pt-5" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">We have <span class="number" data-number="850000">0</span> great job offers you deserve!</p>
+                <h1 class="mb-5" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Your Dream <br><span>Job is Waiting</span></h1>
+
+                <div class="ftco-search">
+                    <div class="row">
+                        <div class="col-md-12 nav-link-wrap">
+                            <div class="nav nav-pills text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                <a class="nav-link active mr-md-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Find a Job</a>
+
+                                @*<a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Find a Candidate</a>*@
+
+                            </div>
+                        </div>
+                        <div class="col-md-12 tab-wrap">
+
+                            <div class="tab-content p-4" id="v-pills-tabContent">
+
+                                <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
+                                    <form asp-action="Item" asp-controller="Home" method="get" class="search-job">
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <div class="form-group">
+                                                    <div class="form-field">
+                                                        <div class="icon"><span class="icon-briefcase"></span></div>
+                                                        @*<input type="text" class="form-control" placeholder="eg. Garphic. Web Developer">*@
+                                                        @Html.TextBox("name", Model.FilterViewModel.Name, htmlAttributes: new { @class = "form-control my-1 mr-sm-2", @placeholder = "eg. Garphic. Web Developer" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-group">
+                                                    <div class="form-field">
+                                                        <div class="select-wrap">
+                                                            @*<div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                                                <select name="" id="" class="form-control">
+                                                                    <option value="">Category</option>
+                                                                    <option value="">Full Time</option>
+                                                                    <option value="">Part Time</option>
+                                                                    <option value="">Freelance</option>
+                                                                    <option value="">Internship</option>
+                                                                    <option value="">Temporary</option>
+                                                                </select>*@
+                                                            @Html.DropDownList("category", Model.FilterViewModel.Categories, htmlAttributes: new { @class = "custom-select my-1 mr-sm-2" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*<div class="col-md">
+                                                    <div class="form-group">
+                                                        <div class="form-field">
+                                                            <div class="icon"><span class="icon-map-marker"></span></div>
+                                                            <input type="text" class="form-control" placeholder="Location">
+                                                        </div>
+                                                    </div>
+                                                </div>*@
+                                            <div class="col-md">
+                                                <div class="form-group">
+                                                    <div class="form-field">
+                                                        <input type="submit" value="Search" class="form-control btn btn-primary">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-performance-tab">
+                                    <form action="#" class="search-job">
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <div class="form-group">
+                                                    <div class="form-field">
+                                                        <div class="icon"><span class="icon-user"></span></div>
+                                                        <input type="text" class="form-control" placeholder="eg. Adam Scott">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-group">
+                                                    <div class="form-field">
+                                                        <div class="select-wrap">
+                                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                                            <select name="" id="" class="form-control">
+                                                                <option value="">Category</option>
+                                                                <option value="">Full Time</option>
+                                                                <option value="">Part Time</option>
+                                                                <option value="">Freelance</option>
+                                                                <option value="">Internship</option>
+                                                                <option value="">Temporary</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-group">
+                                                    <div class="form-field">
+                                                        <div class="icon"><span class="icon-map-marker"></span></div>
+                                                        <input type="text" class="form-control" placeholder="Location">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-group">
+                                                    <div class="form-field">
+                                                        <input type="submit" value="Search" class="form-control btn btn-primary">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+                <span class="subheading">Znajdziemy dla Ciebie pracę marzeń</span>
+                <h2 class="mb-4"><span>Agencja pracy </span> Time on Job</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 ftco-animate">
+
+                <div class="job-post-item bg-white p-4 d-block d-md-flex align-items-center">
+
+                    <div class="mb-4 mb-md-0 mr-5">
+                        <h2 class="mr-3 text-black h4">Agencja pracy Time on Job - znajdziemy dla Ciebie pracę marzeń</h2>
+                        <p class="full-width">
+                            Szukasz zatrudnienia związanego z Twoim wykształceniem? Nie możesz
+                            trafić na dobre oferty? Zapraszamy do kontaktu z nami – chętnie
+                            pomożemy w znalezieniu idealnego stanowiska. Z nami oszczędzisz czas
+                            i nerwy – bierzemy pod uwagę kwalifikacje klienta, jego wykształcenie,
+                            pasje, oczekiwania, a także charakterystykę dzisiejszego rynku pracy.
+                            Wyszukujemy oferty pracy, które mogą zainteresować naszych klientów,
+                            często też pośredniczymy w kontakcie z firmą.
+                        </p>
+                    </div>
+
+                    <div class="ml-auto d-flex">
+                        <a href="#" class="btn btn-danger rounded-circle btn-favorite d-flex align-items-center love">
+                            <span class="icon-heart"></span>
+                        </a>
+                    </div>
+                </div>
+            </div><!-- end -->
+
+            <div class="col-md-12 ftco-animate">
+
+                <div class="job-post-item bg-white p-4 d-block d-md-flex align-items-center">
+
+                    <div class="mb-4 mb-md-0 mr-5">
+                        <h2 class="mr-3 text-black h4">Agencja pracy - pomoc dla kandydata</h2>
+                        <p class="full-width">
+                            Nasza agencja pracy z siedzibą w Warszawie pomaga kandydatom w znalezieniu
+                            pracy. Po przeprowadzeniu krótkiego wywiadu z zainteresowanym przedstawiamy
+                            najodpowiedniejsze oferty pracy uwzględniające doświadczenie zawodowe i
+                            oczekiwania kandydata. Posiadamy bogatą bazę ofert pracy – zarówno dla
+                            pracowników fizycznych, jak i umysłowych. Z nami każdy znajdzie coś dla
+                            siebie. Udzielamy niezbędnych informacji dotyczących kondycji obecnego rynku
+                            pracy, oferujemy szereg szkoleń i kursów podwyższających kwalifikacje,
+                            pomagamy w ustaleniu indywidualnej ścieżki kariery. Wspieramy w znalezieniu
+                            stałej pracy i pracy tymczasowej.
+                        </p>
+                    </div>
+
+                    <div class="ml-auto d-flex">
+                        <a href="#" class="btn btn-danger rounded-circle btn-favorite d-flex align-items-center love">
+                            <span class="icon-heart"></span>
+                        </a>
+                    </div>
+                </div>
+            </div><!-- end -->
+
+            <div class="col-md-12 ftco-animate">
+
+                <div class="job-post-item bg-white p-4 d-block d-md-flex align-items-center">
+
+                    <div class="mb-4 mb-md-0 mr-5">
+                        <h2 class="mr-3 text-black h4">Wsparcie dla pracodawców - rekrutacja jeszcze nigdy nie była tak prosta</h2>
+                        <p class="full-width">
+                            Swoje działania kierujemy również dla pracodawców z całej całej Polski.
+                            W naszej agencji pracy uzyskasz profesjonalne wsparcie w poszukiwaniu odpowiedniego
+                            pracownika. Posiadamy bogate bazy danych potencjalnych kandydatów. Prowadzimy między innymi:
+                        </p>
+                        <ul>
+                            <li class="order">
+                                rekrutacje stałe – po konsultacji z klientem ustalamy dokładny profil idealnego kandydata,
+                                przekażemy ofertę osobom, które najlepiej odpowiadają wymaganiom pracodawcy, wdrażamy w
+                                życie tzw. “direct search”. Na życzenie klienta przeprowadzamy wstępną rekrutację, analizujemy
+                                aplikacje kandydatów i weryfikujemy ich kompetencje, przedstawiamy pracodawcy dokładne raporty
+                                z dostępnością danych kandydatów oraz ich wymaganiami finansowymi.
+                            </li>
+                            <li class="order">
+                                rekrutacje pracowników tymczasowych – kompletujemy wyłącznie wykwalifikowany personel,
+                                pomagamy w optymalizacji i obniżeniu kosztów zatrudnienia, weryfikujemy poszczególne kandydatury.
+                            </li>
+                            <li class="order">
+                                rekrutacja cudzoziemców – znajdujemy odpowiednich kandydatów i pomagamy we wszystkich
+                                sprawach formalnych związanych z ich zatrudnieniem.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="ml-auto d-flex">
+                        <a href="#" class="btn btn-danger rounded-circle btn-favorite d-flex align-items-center love">
+                            <span class="icon-heart"></span>
+                        </a>
+                    </div>
+                </div>
+            </div><!-- end -->
+
+            <div class="col-md-12 ftco-animate">
+
+                <div class="job-post-item bg-white p-4 d-block d-md-flex align-items-center">
+
+                    <div class="mb-4 mb-md-0 mr-5">
+                        <h2 class="mr-3 text-black h4">Agencja pracy Time on Job</h2>
+                        <p class="full-width">
+                            Z nami obie strony (pracodawca i pracownik) mogą rozpocząć owocną, satysfakcjonującą
+                            współpracę. Zaufaj nam – pomożemy Tobie swobodnie poruszać się po rynku pracy.
+                            Jesteśmy specjalistami w swojej dziedzinie. Działamy na rynku nieustannie od dłuższego czasu,
+                            w związku z czym posiadamy ogromne doświadczenie oraz wachlarz przydatnych umiejętności.
+                            W każdej sprawie działamy w pełni kompleksowo, jesteśmy rzetelni i sumienni.
+                            Korzystając z naszych usług masz gwarancję bezpieczeństwa i jakości usług na najwyższym poziomie.
+
+                            Agencja Pracy Time on Job to sprawdzone miejsce, w którym zarówno pracownik, jak i pracodawca
+                            otrzymają od nas wiele cennych i sprawdzonych porad oraz wskazówek. Swoją ofertę dedykujemy
+                            wszystkim przedsiębiorcom i ich pracownikom, dla których ważne jest podnoszenie swoich
+                            kwalifikacji i konkurencyjności. Z nami znajdziesz wiele możliwości.
+                        </p>
+                    </div>
+
+                    <div class="ml-auto d-flex">
+                        <a href="#" class="btn btn-danger rounded-circle btn-favorite d-flex align-items-center love">
+                            <span class="icon-heart"></span>
+                        </a>
+                    </div>
+                </div>
+            </div><!-- end -->
+        </div>
+</section>
+
+@*<section class="ftco-section testimony-section bg-light">
+        <div class="container">
+    <div class="row ftco-animate p-0">
+        <div class="col-md-12">
+            <div class="owl-carousel" id="carouselOne">
+                <div class="col-md-12 ftco-animate">
+                    <div class="job-post-item bg-white p-4 d-block d-md-flex align-items-center">
+                        <div class="mb-4 mb-md-0 mr-5">
+                            <h2 class="mr-3 text-black h4">Agencja pracy Time on Job - znajdziemy dla Ciebie pracę marzeń</h2>
+                            <p class="full-width">
+                                Szukasz zatrudnienia związanego z Twoim wykształceniem? Nie możesz
+                                trafić na dobre oferty? Zapraszamy do kontaktu z nami – chętnie
+                                pomożemy w znalezieniu idealnego stanowiska. Z nami oszczędzisz czas
+                                i nerwy – bierzemy pod uwagę kwalifikacje klienta, jego wykształcenie,
+                                pasje, oczekiwania, a także charakterystykę dzisiejszego rynku pracy.
+                                Wyszukujemy oferty pracy, które mogą zainteresować naszych klientów,
+                                często też pośredniczymy w kontakcie z firmą.
+                            </p>
+                        </div>
+
+                        <div class="ml-auto d-flex">
+                            <a href="#" class="btn btn-danger rounded-circle btn-favorite d-flex align-items-center love">
+                                <span class="icon-heart"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div><!-- end -->
+
+
+                <div class="col-md-12 ftco-animate">
+
+                    <div class="job-post-item bg-white p-4 d-block d-md-flex align-items-center">
+
+                        <div class="mb-4 mb-md-0 mr-5">
+                            <h2 class="mr-3 text-black h4">Agencja pracy - pomoc dla kandydata</h2>
+                            <p class="full-width">
+                                Nasza agencja pracy z siedzibą w Warszawie pomaga kandydatom w znalezieniu
+                                pracy. Po przeprowadzeniu krótkiego wywiadu z zainteresowanym przedstawiamy
+                                najodpowiedniejsze oferty pracy uwzględniające doświadczenie zawodowe i
+                                oczekiwania kandydata. Posiadamy bogatą bazę ofert pracy – zarówno dla
+                                pracowników fizycznych, jak i umysłowych. Z nami każdy znajdzie coś dla
+                                siebie. Udzielamy niezbędnych informacji dotyczących kondycji obecnego rynku
+                                pracy, oferujemy szereg szkoleń i kursów podwyższających kwalifikacje,
+                                pomagamy w ustaleniu indywidualnej ścieżki kariery. Wspieramy w znalezieniu
+                                stałej pracy i pracy tymczasowej.
+                            </p>
+                        </div>
+
+                        <div class="ml-auto d-flex">
+                            <a href="#" class="btn btn-danger rounded-circle btn-favorite d-flex align-items-center love">
+                                <span class="icon-heart"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div><!-- end -->
+
+                <div class="col-md-12 ftco-animate">
+
+                    <div class="job-post-item bg-white p-4 d-block d-md-flex align-items-center">
+
+                        <div class="mb-4 mb-md-0 mr-5">
+                            <h2 class="mr-3 text-black h4">Wsparcie dla pracodawców - rekrutacja jeszcze nigdy nie była tak prosta</h2>
+                            <p class="full-width">
+                                Swoje działania kierujemy również dla pracodawców z całej całej Polski.
+                                W naszej agencji pracy uzyskasz profesjonalne wsparcie w poszukiwaniu odpowiedniego
+                                pracownika. Posiadamy bogate bazy danych potencjalnych kandydatów. Prowadzimy między innymi:
+                            </p>
+                            <ul>
+                                <li class="order">
+                                    rekrutacje stałe – po konsultacji z klientem ustalamy dokładny profil idealnego kandydata,
+                                    przekażemy ofertę osobom, które najlepiej odpowiadają wymaganiom pracodawcy, wdrażamy w
+                                    życie tzw. “direct search”. Na życzenie klienta przeprowadzamy wstępną rekrutację, analizujemy
+                                    aplikacje kandydatów i weryfikujemy ich kompetencje, przedstawiamy pracodawcy dokładne raporty
+                                    z dostępnością danych kandydatów oraz ich wymaganiami finansowymi.
+                                </li>
+                                <li class="order">
+                                    rekrutacje pracowników tymczasowych – kompletujemy wyłącznie wykwalifikowany personel,
+                                    pomagamy w optymalizacji i obniżeniu kosztów zatrudnienia, weryfikujemy poszczególne kandydatury.
+                                </li>
+                                <li class="order">
+                                    rekrutacja cudzoziemców – znajdujemy odpowiednich kandydatów i pomagamy we wszystkich
+                                    sprawach formalnych związanych z ich zatrudnieniem.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="ml-auto d-flex">
+                            <a href="#" class="btn btn-danger rounded-circle btn-favorite d-flex align-items-center love">
+                                <span class="icon-heart"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div><!-- end -->
+
+                <div class="col-md-12 ftco-animate">
+
+                    <div class="job-post-item bg-white p-4 d-block d-md-flex align-items-center">
+
+                        <div class="mb-4 mb-md-0 mr-5">
+                            <h2 class="mr-3 text-black h4">Agencja pracy Time on Job</h2>
+                            <p class="full-width">
+                                Z nami obie strony (pracodawca i pracownik) mogą rozpocząć owocną, satysfakcjonującą
+                                współpracę. Zaufaj nam – pomożemy Tobie swobodnie poruszać się po rynku pracy.
+                                Jesteśmy specjalistami w swojej dziedzinie. Działamy na rynku nieustannie od dłuższego czasu,
+                                w związku z czym posiadamy ogromne doświadczenie oraz wachlarz przydatnych umiejętności.
+                                W każdej sprawie działamy w pełni kompleksowo, jesteśmy rzetelni i sumienni.
+                                Korzystając z naszych usług masz gwarancję bezpieczeństwa i jakości usług na najwyższym poziomie.
+
+                                Agencja Pracy Time on Job to sprawdzone miejsce, w którym zarówno pracownik, jak i pracodawca
+                                otrzymają od nas wiele cennych i sprawdzonych porad oraz wskazówek. Swoją ofertę dedykujemy
+                                wszystkim przedsiębiorcom i ich pracownikom, dla których ważne jest podnoszenie swoich
+                                kwalifikacji i konkurencyjności. Z nami znajdziesz wiele możliwości.
+                            </p>
+                        </div>
+
+                        <div class="ml-auto d-flex">
+                            <a href="#" class="btn btn-danger rounded-circle btn-favorite d-flex align-items-center love">
+                                <span class="icon-heart"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div><!-- end -->
+            </div>
+        </div>
+    </div>
+        </div>
+    </section>*@
+
+<section class="ftco-section-parallax">
+    <div class="parallax-img d-flex align-items-center">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+                    <h2>Subcribe to our Newsletter</h2>
+                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
+                    <div class="row d-flex justify-content-center mt-4 mb-4">
+                        <div class="col-md-8">
+                            <form action="#" class="subscribe-form">
+                                <div class="form-group d-flex">
+                                    <input type="text" class="form-control" placeholder="Enter email address">
+                                    <input type="submit" value="Subscribe" class="submit px-3">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

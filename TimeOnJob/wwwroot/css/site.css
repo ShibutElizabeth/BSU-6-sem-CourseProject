@@ -1,0 +1,103 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+.button-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-navBar {
+    margin: 0 10px;
+}
+
+.login_modal, .register_modal {
+    padding-top: 200px;
+}
+
+.signInInput {
+    width: 18px;
+    height: 18px;
+    margin-top: 10px;
+}
+
+.signInLabel {
+    vertical-align: middle;
+}
+
+.emploeyr-list {
+    margin-top: 200px;
+}
+
+#ftco-nav {
+    list-style-type: none;
+}
+
+#navbarDropdown {
+    color: #fff;
+}
+
+.filters {
+    padding: 15px;
+}
+
+.btn.btn-secondary.active.salary {
+    width: 100%;
+}
+
+.ftco-section-job {
+    padding: 2rem 0;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.for-employees-form {
+    margin-top: 7rem;
+}
+
+.for-employers-form {
+    margin-top: 7rem;
+}
+
+.short-text {
+    width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.full-width {
+    text-align: justify
+}
+
+.love {
+    padding: 0.75rem !important;
+}
+
+.order {
+    list-style-type: square;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.footer-center {
+    text-align: center;
+}
+
+.text {
+    color: #fff;
+}
+
+.icons-color {
+    color: #000000;
+}
+
+.card-job-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+}

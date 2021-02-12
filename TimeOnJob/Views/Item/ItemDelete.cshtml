@@ -1,0 +1,30 @@
+﻿@model Alia.Models.Item
+@{
+    ViewBag.Title = "Item delete";
+}
+
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-body">
+            <table class="table">
+                <tr><th>id</th><th>name</th><th>Price</th><th>image</th></tr>
+                <tr>
+                    <td>@Html.DisplayFor(model => model.ItemId)</td>
+                    <td>@Html.DisplayFor(model => model.ItemName)</td>
+                    <td>@Html.DisplayFor(model => model.Price)</td>
+                    <td>
+                        @if (Model.PreviewImageData != null)
+                        {
+                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.PreviewImageData))" class="rounded" />
+                        }
+                    </td>
+                </tr>
+                <form asp-controller="Item" asp-action="ItemDelete" method="post">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Delete Item</button>
+                    </div>
+                </form>
+            </table>
+        </div>
+    </div>
+</div>
