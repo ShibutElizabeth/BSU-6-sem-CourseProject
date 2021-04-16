@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Alia.Models.Region>
+@{
+    ViewData["Title"] = "Region";
+}
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-body">
+            <a class="btn btn-primary" asp-action="RegionCreate">Create Region</a>
+            <table class="table">
+                <tr><th>id</th><th>name</th></tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.RegionId</td>
+                        <td>@item.RegionName</td>
+                        <td>
+                            @*<a asp-action="DetailsMeasuringSystem" asp-controller="Job" asp-route-id="@item.MeasuringSystemId">Details</a> |*@
+                            <a class="btn btn-success" asp-action="RegionEdit" asp-controller="Item" asp-route-id="@item.RegionId">Edit</a> |
+                            <a class="btn btn-danger" asp-action="RegionDelete" asp-controller="Item" asp-route-id="@item.RegionId">Delete</a> |
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

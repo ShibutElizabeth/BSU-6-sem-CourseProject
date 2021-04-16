@@ -1,0 +1,7 @@
+﻿@model IEnumerable<Alia.Models.Locality>
+    <select class="select-filter" id="locality" name="Locality">
+        @foreach (var item in Model)
+        {
+            <option value="@item.LocalityId">@item.LocalityName</option>
+        }
+    </select>

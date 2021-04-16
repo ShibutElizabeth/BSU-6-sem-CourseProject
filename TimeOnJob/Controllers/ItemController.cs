@@ -320,7 +320,7 @@ namespace Alia.Controllers
                 itemcreate.UserId = _userManager.GetUserId(HttpContext.User);
                 itemcreate.CreatedDate = DateTime.Now;
                 itemcreate.Price = jobvm.Price;
-
+                
                 db.Items.Add(itemcreate);
                 db.SaveChanges();
             }
@@ -328,7 +328,7 @@ namespace Alia.Controllers
         }
         [HttpGet]
         [ActionName("ItemDelete")]
-        public async Task<IActionResult> ConfirmJobDelete(int? id)
+        public async Task<IActionResult> ConfirmItemDelete(int? id)
         {
             if (id != null)
             {
@@ -336,7 +336,7 @@ namespace Alia.Controllers
                 if (item != null)
                     return View(item);
             }
-            return NotFound();
+            return View();
         }
         [HttpPost]
         public async Task<IActionResult> ItemDelete(int? id)
@@ -368,20 +368,37 @@ namespace Alia.Controllers
             {
                 Item item
                     = await db.Items.FirstOrDefaultAsync(p => p.ItemId == id);
+                
                 if (item != null)
                     return View(item);
             }
-            return NotFound();
+            return View();
         }
         [HttpPost]
         public async Task<IActionResult> ItemEdit(Item item)
         {
             db.Items.Update(item);
             await db.SaveChangesAsync();
-            return RedirectToAction("Item", "Home");
+            return RedirectToAction("Items", "Item");
         }
+        public async Task<IActionResult> Items(int page=1)
+        {
+            
+            int pageSize = 3;   // количество элементов на странице
 
+            IQueryable<Item> source = db.Items;
+            var count = await source.CountAsync();
+            var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            ItemListViewModel viewModel = new ItemListViewModel
+            {
+                PageViewModel = pageViewModel,
+                Items = items
+            };
+            return View(viewModel);
+            
+        }
 
     }
 }

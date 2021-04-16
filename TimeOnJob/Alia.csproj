@@ -16,4 +16,15 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0001" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\css\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\.DS_Store">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
