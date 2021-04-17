@@ -1,0 +1,20 @@
+﻿@model Alia.Models.Region
+@{
+    ViewBag.Title = "Edit region";
+}
+
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-body">
+            <form asp-action="RegionEdit" asp-controller="Item" asp-route-regionid="@Model.RegionId">
+                <div class="form-group">
+                    <label asp-for="RegionName" class="control-label">Region name</label>
+                    <input type="text" asp-for="RegionName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

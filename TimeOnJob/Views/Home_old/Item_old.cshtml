@@ -1,0 +1,222 @@
+﻿@model Alia.ViewModels.ItemListViewModel
+@addTagHelper *, Alia
+@{
+    ViewBag.Title = "Alia list";
+}
+<style>
+    @@font-face {
+        font-family: 'FontAwesome';
+        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal
+    }
+
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale
+    }
+
+    .glyphicon-chevron-down:before {
+        content: "\f078";
+    }
+
+    .glyphicon-chevron-up:before {
+        content: "\f077";
+    }
+</style>
+<div class="row">
+    <aside class="col-xl-2 filters">
+        <form asp-action="Item" asp-controller="Home" method="get">
+            <div class="form-group">
+                <label for="key-word">Key word</label>
+                @Html.TextBox("name", Model.FilterViewModel.Name, htmlAttributes: new { @class = "form-control" })
+                @*<input type="text" name="name" class="form-control" id="key-word" aria-describedby="emailHelp" placeholder="">*@
+                @*<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>*@
+            </div>
+            <!-- Split dropright button -->
+            <div class="form-group">
+                <label class="my-1 mr-2" for="inputProfession">Professions</label>
+                @*<select name="category" asp-items="Model.Categories" class="custom-select my-1 mr-sm-2" id="inputProfession">
+                    </select>*@
+                @Html.DropDownList("category", Model.FilterViewModel.Categories, htmlAttributes: new { @class = "custom-select my-1 mr-sm-2" })
+            </div>
+
+            <div class="form-group">
+                <label for="region">Locality</label>
+                <select name="region" asp-items="ViewBag.Regions" class="custom-select my-1 mr-sm-2" id="region">
+                </select>
+                <select name="locality" asp-items="ViewBag.Localities" class="custom-select my-1 mr-sm-2" id="locality">
+                </select>
+                @section scripts{
+                    <script type="text/javascript">
+                    $(function () {
+                        $('#region').change(function()
+                        {
+                            // получаем выбранный id
+                            var id = $(this).val();
+                            $.ajax({
+                                type: 'GET',
+                                url: '@Url.Action("GetItems")/' + id,
+                                success: function (data) {
+                                    // заменяем содержимое присланным частичным представлением
+                                    $('#locality').replaceWith(data);
+                                }
+                            });
+                        });
+                    })
+                    </script>
+                }
+
+                <input asp-controller="Home" asp-action="Item" formmethod="get" type="submit" value="Filter" class="btn btn-block btn-primary mr-0 ml-0" />
+            </div>
+
+        </form>
+        <label>Sort by</label>
+        <div class="form-group">
+            <div class="btn-group btn-block btn-group-toggle">
+                <sort-label class="btn btn-block btn-secondary" action="Item" up-date="@Model.SortViewModel.UpDate"
+                            current="@Model.SortViewModel.Current" property="@Model.SortViewModel.DateSort"
+                            name="@Model.FilterViewModel.Name"
+                            category="@Model.FilterViewModel.SelectedCategory"
+                            locality="@Model.FilterViewModel.SelectedLocality">
+                    Date
+                </sort-label>
+                <sort-label class="btn btn-block btn-secondary" action="Item" up-salary="@Model.SortViewModel.UpPrice"
+                            current="@Model.SortViewModel.Current" property="@Model.SortViewModel.PriceSort"
+                            name="@Model.FilterViewModel.Name"
+                            category="@Model.FilterViewModel.SelectedCategory"
+                            locality="@Model.FilterViewModel.SelectedLocality">
+                    Salary
+                </sort-label>
+
+            </div>
+        </div>
+
+    </aside>
+    @*//kuku*@
+
+    @*//второй вариант*@
+    <div class="col-xl-10">
+        <section class="ftco-section-job bg-light">
+            <div class="container">
+                <div class="row">
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="col-lg-12 col-md-12 card mb-4 p-0 shadow bg-white rounded">
+                            <a class="card-header btn btn-light m-0" asp-action="ItemDetails" asp-controller="Home" asp-route-id="@item.ItemId">
+                                <span class="float-left">@item.ItemName</span>
+                                <span class="float-right text-muted small">@item.CreatedDate.ToString("dd.MM.yyyy")</span>
+                            </a>
+                            <div class="card-body" asp-action="JobDetails" asp-controller="Home" asp-route-id="@item.ItemId">
+                                <div class="row">
+                                    <a class="col-lg-3" style="padding-right: 5px" asp-action="ItemDetails" asp-controller="Home" asp-route-id="@item.ItemId">
+                                        @if (item.PreviewImageData != null)
+                                        {
+                                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(item.PreviewImageData))" class="rounded" />
+                                        }
+                                    </a>
+                                    <div class="col-lg-9" style="padding-left: 5px">
+                                        <p class="card-text">@item.Description</p>
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <a class="btn btn-outline-primary btn-sm" role="button" asp-action="ItemEdit" asp-controller="Item" asp-route-id="@item.ItemId">Edit description</a>
+                                            <a class="btn btn-outline-danger btn-sm" role="button" asp-action="ItemDelete" asp-controller="Item" asp-route-id="@item.ItemId">Delete description</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="card-footer flex-row align-middle" asp-action="ItemDetails" asp-controller="Home" asp-route-id="@item.ItemId">
+                                <span class="float-left icon-my_location mr-2 icons-color"></span> <span class="mr-3 icons-color">@item.Locality.LocalityName</span>
+                                <span class="icon-layers mr-2 icons-color"></span> <span class="mr-4 icons-color">@item.Category.CategoryName</span>
+                                <span class="float-right small icons-color">@item.Price $</span>
+                            </a>
+                        </div>
+                    }
+                </div>
+
+                <div class="block-27 center">
+                    
+                    @if (Model.PageInfo.EndPage > 1)
+                    {
+                        <ul>
+                            @if (Model.PageInfo.CurrentPage > 1)
+                            {
+                                <li class="previous">
+                                    <page-link page="@(Model.PageInfo.CurrentPage-1)" action="Item"
+                                               category="@(Model.FilterViewModel.SelectedCategory)"
+                                               locality="@(Model.FilterViewModel.SelectedLocality)"
+                                               name="@(Model.FilterViewModel.Name)"
+                                               sort-view-model="@(Model.SortViewModel)">&lt&lt</page-link>
+                            
+                                </li>
+                            }
+
+                            @for (var page = Model.PageInfo.StartPage; page <= Model.PageInfo.EndPage; page++)
+                            {
+                                @if (page == Model.PageInfo.CurrentPage)
+                                {
+                                    <li>
+                                        <page-link class="active" page="@(Model.PageInfo.CurrentPage)" action="Item"
+                                                   category="@(Model.FilterViewModel.SelectedCategory)"
+                                                   locality="@(Model.FilterViewModel.SelectedLocality)"
+                                                   name="@(Model.FilterViewModel.Name)"
+                                                   sort-view-model="@(Model.SortViewModel)">@(page)</page-link>
+                                    </li>
+                                }
+                                @if (page != Model.PageInfo.CurrentPage)
+                                {
+                                    <li>
+                                        <page-link page="@(page)" action="Item" 
+                                                   category="@(Model.FilterViewModel.SelectedCategory)"
+                                                   locality="@(Model.FilterViewModel.SelectedLocality)"
+                                                   name="@(Model.FilterViewModel.Name)"
+                                                   sort-view-model="@(Model.SortViewModel)">@(page)</page-link>
+                                    </li>
+                                }
+                            }
+                                @if (Model.PageInfo.CurrentPage < Model.PageInfo.TotalPages)
+                                {
+                                    <li class="next">
+                                        <page-link page="(Model.PageInfo.CurrentPage+1)" action="Item"
+                                                category="@(Model.FilterViewModel.SelectedCategory)"
+                                                locality="@(Model.FilterViewModel.SelectedLocality)"
+                                                name="@(Model.FilterViewModel.Name)"
+                                                sort-view-model="@(Model.SortViewModel)">&gt&gt</page-link>
+                                    </li>
+                                }
+                        </ul>
+                    }
+                </div>
+                
+            </div>
+
+        </section>
+
+        @*<section class="ftco-section-parallax">
+                <div class="parallax-img d-flex align-items-center">
+                    <div class="container">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+                                <h2>Subcribe to our Newsletter</h2>
+                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
+                                <div class="row d-flex justify-content-center mt-4 mb-4">
+                                    <div class="col-md-8">
+                                        <form action="#" class="subscribe-form">
+                                            <div class="form-group d-flex">
+                                                <input type="text" class="form-control" placeholder="Enter email address">
+                                                <input type="submit" value="Subscribe" class="submit px-3">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>*@
+    </div>
+</div>

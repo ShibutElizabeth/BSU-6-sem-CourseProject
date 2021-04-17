@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Alia.Models.User>
+@{
+    ViewBag.Title = "Users list";
+}
+
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-body">
+            <a class="btn btn-primary" asp-action="Create">Add User</a>
+            <table class="table">
+                <thead>
+                    <tr><th>UserName</th><th>Email</th><th></th></tr>
+                </thead>
+                @foreach (var user in Model)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td class="text-right">
+                                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                                    <a class="btn btn-sm btn-primary" asp-action="ChangePassword" asp-route-id="@user.Id">Change password</a>
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+    </div>
+</div>

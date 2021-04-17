@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Alia.Models.Locality>
-    <select class="custom-select my-1 mr-sm-2" id="locality" name="Locality">
+    <select class="select-filter" id="locality" name="Locality">
         @foreach (var item in Model)
         {
             <option value="@item.LocalityId">@item.LocalityName</option>

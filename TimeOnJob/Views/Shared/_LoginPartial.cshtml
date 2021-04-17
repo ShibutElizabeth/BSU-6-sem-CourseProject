@@ -1,35 +1,29 @@
 ﻿@*<ul class="navbar-nav">*@
 @if (User.Identity.IsAuthenticated)
 {
-    <li class="nav-item dropdown">
-        <a href="#" class="nav-item dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" asp-area="" asp-controller="Item" asp-action="ItemCreate">Create Item</a>
-            <a class="dropdown-item" asp-area="" asp-controller="Item" asp-action="Locality">Localities</a>
-            <a class="dropdown-item" asp-area="" asp-controller="Item" asp-action="Region">Regions</a>
-            <a class="dropdown-item" asp-area="" asp-controller="Item" asp-action="Category">Categories</a>
-            <a class="dropdown-item" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-            <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+    <li class="li-header">
+        <a class="dropbtn" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+        <div class="dropdown-content" aria-labelledby="navbarDropdownMenuLink">
+            <a asp-area="" asp-controller="Item" asp-action="ItemCreate">Create Item</a>
+            <a asp-area="" asp-controller="Item" asp-action="Locality">Localities</a>
+            <a asp-area="" asp-controller="Item" asp-action="Region">Regions</a>
+            <a asp-area="" asp-controller="Item" asp-action="Category">Categories</a>
+            <a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+            <a asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+            <a asp-area="" asp-controller="Account" asp-action="Register">Register</a>
         </div>
     </li>
-    <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                @*<a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @User.Identity.Name!</a>*@
-                <a class="nav-link">Hello @User.Identity.Name!</a>
-            </li>
-            <li class="nav-item">
-                <button type="submit" class="btn btn-link navbar-btn navbar-link nav-link">Log out</button>
-            </li>
-        </ul>
-    </form>
+
 }
 @*else
-{
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
-        <a class="nav-link text-dark" asp-page="/Account/Register">Register</a>
-    </li>
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
+            <a class="nav-link text-dark" asp-page="/Account/Register">Register</a>
+        </li>
+
+
+        
+
 }*@
 @*</ul>*@

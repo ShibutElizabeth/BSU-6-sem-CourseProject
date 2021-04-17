@@ -1,36 +1,40 @@
-﻿@model Alia.Models.Item
+﻿@model Alia.ViewModels.ItemViewModel
 @{
     ViewBag.Title = "Edit Item";
 }
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<form class="background-cri" asp-action="ItemEdit" asp-controller="Item" enctype="multipart/form-data">
+    <div class="container-cri">
+        <div class="photo-block">
+            <div class="example-1">
 
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-body">
-            <form asp-action="ItemEdit" asp-controller="Item" asp-route-localityid="@Model.ItemId">
                 <div class="form-group">
-                    <label asp-for="ItemName" class="control-label">Item name</label>
-                    <input type="text" asp-for="ItemName" class="form-control" />
+                    <label class="label">
+                        @if (Model.PIData != null)
+                        {
+                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.PIData))" width="140" height="140" class="photo-deli" />
+                        }
+                        <input type="file" name="uploadedFile">
+                    </label>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label">Description</label>
-                    <input type="text" asp-for="Description" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Price" class="control-label">Description</label>
-                    <input type="text" asp-for="Price" class="form-control" />
-                </div>
-                <p>
-                    Category <br />
-                    @Html.DropDownListFor(model => model.CategoryId, ViewBag.Regions as SelectList)
-                </p>
-                <p>
-                    Locality <br />
-                    @Html.DropDownListFor(model => model.LocalityId, ViewBag.Regions as SelectList)
-                </p>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Send</button>
-                </div>
-            </form>
+            </div>
+        </div>
+        <div class="name-cri-block">
+            <h2 class="inscription-cri">Name</h2>
+            <h2 class="inscription-cri">Price</h2>
+            <h2 class="inscription-cri">Description</h2>
+        </div>
+        <div class="input-cri-block input-cri-container">
+            <input type="text" class="input-cri" asp-for="ItemName">
+            <input type="text" class="input-cri-t" asp-for="Price">
+            <input type="text" class="input-cri-desc" asp-for="Description">
         </div>
     </div>
-</div>
+    <div class="dropdown-cri-container">
+        @Html.DropDownListFor(model => model.CategoryId, ViewBag.Categories as SelectList, htmlAttributes: new { @class = "dropdown-cri option-cri" });
+        @Html.DropDownListFor(model => model.LocalityId, ViewBag.Localities as SelectList, htmlAttributes: new { @class = "dropdown-cri option-cri" });
+
+
+    </div>
+    <input type="submit" class="cri-button" value="Send">
+</form>

@@ -4,7 +4,7 @@ namespace Alia.Models
 {
     public class PageInfo
     {
-        public PageInfo(int totalItems, int? page, string url = "", int pageSize = 2)//количество на странице равно 2 для наглядности
+        public PageInfo(int totalItems, int? page, string url = "", int pageSize = 3)//количество на странице равно 2 для наглядности
         {
             // calculate total, start and end pages
             var totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);

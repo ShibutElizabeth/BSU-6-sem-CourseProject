@@ -1,0 +1,25 @@
+﻿@model Alia.Models.Locality
+@{
+    ViewBag.Title = "Edit locality";
+}
+
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-body">
+            <form asp-action="LocalityEdit" asp-controller="Item" asp-route-localityid="@Model.LocalityId">
+                <div class="form-group">
+                    <label asp-for="LocalityName" class="control-label">Locality name</label>
+                    <input type="text" asp-for="LocalityName" class="form-control" />
+                </div>
+                <p>
+                    Region <br />
+                    @Html.DropDownListFor(model => model.RegionId, ViewBag.Regions as SelectList)
+                </p>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

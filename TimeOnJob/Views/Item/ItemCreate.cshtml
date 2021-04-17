@@ -2,39 +2,150 @@
 @{
     ViewData["Title"] = "Add Item";
 }
-    <form asp-action="ItemCreate" asp-controller="Item" enctype="multipart/form-data">
+<script type="text/javascript" src="assets/js/jquery.uploadPreview.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<form class="background-cri" asp-action="ItemCreate" asp-controller="Item" enctype="multipart/form-data" id="criform">
+    <div class="container-cri">
+        <div class="photo-block">
+            <div class="example-1">
+                <div class="form-group">
 
-        <div class="form-group">
-            <label asp-for="ItemName" class="control-label">Item Name</label>
-            <input type="text" asp-for="ItemName" class="form-control" />
+                    <label class="label" id="preview">
+
+                        <i class="material-icons" style="position: absolute; top: 250px; left:430px;">attach_file</i>
+                        <span class="title" style="position: absolute; top: 400px; left:360px;">Choose file</span>
+                        <input name="uploadedFile" id="upload" type="file" />
+                    </label>
+                    @*
+        <script>
+            (function () {
+                var maxFileSize = 2 * 1024 * 1024; // (байт) Максимальный размер файла (2мб)
+                var queue = {};
+                var form = $('form#criform');
+                var inpElem = document.getElementById('upload'),
+                    divElem = document.getElementById('preview');
+                inpElem.addEventListener("change", function (e) {
+                    preview(this.files[0]);
+                });
+                var img, del, btn = document.createElement('button');
+                var clName = "middle text";
+                btn.className = clName;
+
+                btn.onclick = function () {
+
+                };
+                function preview(file) {
+                    if (!file.type.match(/image\/(jpeg|jpg|png|gif)/)) {
+                        alert('Фотография должна быть в формате jpg, png или gif');
+                        continue;
+                    }
+
+                    if (file.size > maxFileSize) {
+                        alert('Размер фотографии не должен превышать 2 Мб');
+                        continue;
+                    }
+
+                        var reader = new FileReader();
+
+                        reader.addEventListener("load", function (event) {
+
+                            del = document.createElement('div');
+                            img = document.createElement('img');
+                            img.src = event.target.result;
+                            divElem.appendChild(img);
+                            inpElem.replaceWith(del);
+                            queue[file.name] = file;
+                        });
+
+                        reader.readAsDataURL(file);
+
+                }
+                form.on('submit', function (event) {
+
+                    var formData = new FormData(this);
+
+                    for (var id in queue) {
+                        formData.append('images[]', queue[id]);
+                    }
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        async: true,
+                        success: function (res) {
+                            alert(res)
+                        },
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    });
+
+                    return false;
+                });
+            })();
+        </script>*@
+
+                </div>
+                
+            </div>
         </div>
-
-        <div class="form-group">
-            <label asp-for="Description" class="control-label">Description</label>
-            <input type="text" asp-for="Description" class="form-control" />
+        <div class="name-cri-block">
+            <h2 class="inscription-cri">Name</h2>
+            <h2 class="inscription-cri">Price</h2>
+            <h2 class="inscription-cri">Description</h2>
         </div>
-        <div class="form-group form-inline">
-            <label asp-for="Price" class="control-label">Price($)</label>
-            <input type="text" asp-for="Price" class="form-control" />
+        <div class="input-cri-block input-cri-container">
+            <input type="text" class="input-cri" asp-for="ItemName">
+            <input type="text" class="input-cri-t" asp-for="Price">
+            <input type="text" class="input-cri-desc" asp-for="Description">
         </div>
+    </div>
+    <div class="dropdown-cri-container">
+        @Html.DropDownListFor(model => model.CategoryId, ViewBag.Categories as SelectList, htmlAttributes: new { @class = "dropdown-cri option-cri" })
+        @Html.DropDownListFor(model => model.LocalityId, ViewBag.Localities as SelectList, htmlAttributes: new { @class = "dropdown-cri option-cri" })
 
-        @*<img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.PreviewImageData))" />*@
 
-        <div class="form-group">
-            <label>Choose image</label>
-            <input name="uploadedFile" type="file" class="form-control" />
-        </div>
+    </div>
+    <input type="submit" class="cri-button" value="Create" id="submit">
+</form>
+<style>
+    #preview img {
+        margin-top: -120px;
+        margin-left: -1px;
+        width: 320px;
+        height: 320px;
+        position: relative;
+        border-radius: 15px;
+        opacity: 1;
+        display: block;
+        transition: .5s ease;
+        backface-visibility: hidden;
+    }
+    #preview button {
+        transition: .5s ease;
+        opacity: 0;
+        position: absolute;
+        top: 400px;
+        left: 440px;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        text-align: center;
+    }
 
-        <p>
-            Locality <br />
-            @Html.DropDownListFor(model => model.LocalityId, ViewBag.Localities as SelectList)
-        </p>
-        <p>
-            Item's category <br />
-            @Html.DropDownListFor(model => model.CategoryId, ViewBag.Categories as SelectList)
-        </p>
+    #preview:hover img {
+        opacity: 0.3;
+    }
 
-        <p>
-            <input type="submit" value="Create Item" />
-        </p>
-    </form>
+    #preview:hover button {
+        opacity: 1;
+    }
+
+    .text {
+        background-color: #212e28;
+        color: white;
+        font-size: 16px;
+        padding: 16px 32px;
+    }
+</style>

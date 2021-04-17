@@ -3,28 +3,39 @@
     ViewBag.Title = "Item delete";
 }
 
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-body">
-            <table class="table">
-                <tr><th>id</th><th>name</th><th>Price</th><th>image</th></tr>
-                <tr>
-                    <td>@Html.DisplayFor(model => model.ItemId)</td>
-                    <td>@Html.DisplayFor(model => model.ItemName)</td>
-                    <td>@Html.DisplayFor(model => model.Price)</td>
-                    <td>
-                        @if (Model.PreviewImageData != null)
-                        {
-                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.PreviewImageData))" class="rounded" />
-                        }
-                    </td>
-                </tr>
-                <form asp-controller="Item" asp-action="ItemDelete" method="post">
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Delete Item</button>
+<div class="background-deli" role="document">
+    <div class="back-deli-gr">
+        <div class="back-deli-shadow">
+            <div class="table-deli">
+                <div class="tr-deli">
+                    <div class="column-deli-1">
+                          <div class="photo-deli"></div>  
                     </div>
-                </form>
-            </table>
+                    <div class="column-deli-2">
+                        <h3 class="h3-deli margin-2">@Html.DisplayFor(model => model.ItemName)</h3>
+                        <textarea class="h3-deli margin-40 ta-back-deli" readonly>Description</textarea>
+                    </div>
+                    <div class="column-deli-3">
+                        <p class="h3-deli ">Category</p>
+                        <p class="h3-deli ">Locality</p>
+                    </div>
+                    <div class="column-deli-4">
+                        <div><img src="/css/img_new/edit.png" width="20"></div>
+                        <div><img src="/css/img_new/delete.png" width="20"></div>
+                    </div>
+                </div>
+                
+                <div class="tr-deli pagination-deli">
+                    <div class="pagination">
+                        <a href="#">&laquo;</a>
+                        <a href="#">1</a>
+                        <a class="active" href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">&raquo;</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
