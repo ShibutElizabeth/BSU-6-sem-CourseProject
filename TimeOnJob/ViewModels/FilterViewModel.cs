@@ -16,17 +16,19 @@ namespace Alia.ViewModels
 {
     public class FilterViewModel
     {
-        public FilterViewModel(List<Category> categories, int? category, int? locality, string name)
+        public FilterViewModel(List<Category> categories, int? category, int? locality, string name, List<Locality> localities)
         {
             // устанавливаем начальный элемент, который позволит выбрать всех
             categories.Insert(0, new Category { CategoryName = "All", CategoryId = 0 });
-            //localities.Insert(0, new Locality { LocalityName = "All", LocalityId = 0, RegionId = 0 });
+            localities.Insert(0, new Locality { LocalityName = "All", LocalityId = 0, RegionId = 0 });
             Categories = new SelectList(categories, "CategoryId", "CategoryName");
+            Localities = new SelectList(localities, "LocalityId", "LocalityName");
             Name = name;
             SelectedCategory = category;
             SelectedLocality = locality;
         }
         public SelectList Categories { get; set; }
+        public SelectList Localities { get; set; }
         public string Name { get; set; }
         public int? SelectedCategory { get; set; }
         public int? SelectedLocality { get; set; }

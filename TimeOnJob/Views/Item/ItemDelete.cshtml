@@ -1,41 +1,36 @@
 ﻿@model Alia.Models.Item
 @{
-    ViewBag.Title = "Item delete";
+    ViewBag.Title = Model.ItemName;
 }
 
-<div class="background-deli" role="document">
+<form class="background-deli" role="document" asp-controller="Item" asp-action="ItemDelete" method="post">
     <div class="back-deli-gr">
         <div class="back-deli-shadow">
             <div class="table-deli">
                 <div class="tr-deli">
                     <div class="column-deli-1">
-                          <div class="photo-deli"></div>  
+                        @if (Model.PreviewImageData != null)
+                        {
+                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.PreviewImageData))" width="140" height="140" class="photo-deli" />
+                        }
                     </div>
                     <div class="column-deli-2">
                         <h3 class="h3-deli margin-2">@Html.DisplayFor(model => model.ItemName)</h3>
-                        <textarea class="h3-deli margin-40 ta-back-deli" readonly>Description</textarea>
+                        <textarea class="h3-deli margin-40 ta-back-deli" readonly>@Model.Description</textarea>
                     </div>
                     <div class="column-deli-3">
-                        <p class="h3-deli ">Category</p>
-                        <p class="h3-deli ">Locality</p>
+                        <p class="h3-deli ">@Model.Price</p>
+                        <p class="h3-deli ">@Model.CreatedDate</p>
+                        <p class="h3-deli ">@Model.Category.CategoryName</p>
+                        <p class="h3-deli ">@Model.Locality.LocalityName</p>
+
                     </div>
                     <div class="column-deli-4">
-                        <div><img src="/css/img_new/edit.png" width="20"></div>
-                        <div><img src="/css/img_new/delete.png" width="20"></div>
+                        <input type="submit" class="btn-deli" id="submit" value="Delete">
                     </div>
                 </div>
                 
-                <div class="tr-deli pagination-deli">
-                    <div class="pagination">
-                        <a href="#">&laquo;</a>
-                        <a href="#">1</a>
-                        <a class="active" href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">&raquo;</a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-</div>
+</form>

@@ -33,7 +33,7 @@
     <div class="container-shop">
         <div class="filter-block">
             <form class="form-filter" asp-action="Item" asp-controller="Home" method="get">
-                
+
                 @Html.TextBox("name", Model.FilterViewModel.Name, htmlAttributes: new { @class = "input-filter", @placeholder = "key word" })
                 @Html.DropDownList("category", Model.FilterViewModel.Categories, htmlAttributes: new { @class = "select-filter" })
                 <select name="region" asp-items="ViewBag.Regions" class="select-filter" id="region">
@@ -64,37 +64,78 @@
             </form>
         </div>
         <div class="cards-main-block">
-            <div class="gallery">
-                <a target="_blank" href="#">
-                    <img src="/css/img_new/shop/br1.png" alt="Cinque Terre" width="300" height="300">
-                </a>
-                <div class="desc">Add a description of the image here</div>
-            </div>
+            @foreach (var item in Model.Items)
+            {
+                <div class="gallery">
+                    <a target="_blank" asp-controller="Home" asp-action="ItemDetails" asp-route-id="@item.ItemId">
+                        @if (item.PreviewImageData != null)
+                        {
+                            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(item.PreviewImageData))" />
+                            
+                        }
+                    </a>
+                    <div class="desc">@item.ItemName </div>
+                </div>
 
-            <div class="gallery">
-                <a target="_blank" href="#">
-                    <img src="/css/img_new/shop/br1.png" alt="Forest" width="300" height="300">
-                </a>
-                <div class="desc">Add a description of the image here</div>
-            </div>
+            }
+            <div class="filter-block-2" style="margin-bottom: 0px; margin-left:0px; width:100%; ">
+                <div class="block-27 center">
 
-            <div class="gallery">
-                <a target="_blank" href="">
-                    <img src="/css/img_new/shop/br1.png" alt="Northern Lights" width="300" height="300">
-                </a>
-                <div class="desc">Add a description of the image here</div>
-            </div>
+                    @if (Model.PageInfo.EndPage > 1)
+                    {
+                        <ul class="ul-pag color-pag">
+                            @if (Model.PageInfo.CurrentPage > 1)
+                            {
+                                <li class="prev-pag li-pag color-pag">
+                                    <page-link page="@(Model.PageInfo.CurrentPage-1)" action="Item"
+                                               category="@(Model.FilterViewModel.SelectedCategory)"
+                                               locality="@(Model.FilterViewModel.SelectedLocality)"
+                                               name="@(Model.FilterViewModel.Name)"
+                                               sort-view-model="@(Model.SortViewModel)">&lt&lt</page-link>
 
-            <div class="gallery">
-                <a target="_blank" href="">
-                    <img src="/css/img_new/shop/br1.png" alt="Mountains" width="300" height="300">
-                </a>
-                <div class="desc">Add a description of the image here</div>
-            </div>
+                                </li>
+                            }
 
+                            @for (var page = Model.PageInfo.StartPage; page <= Model.PageInfo.EndPage; page++)
+                            {
+                                @if (page == Model.PageInfo.CurrentPage)
+                                {
+                                    <li class="li-pag  color-pag">
+                                        <page-link class="active" style="background-color: #b5b89e;" page="@(Model.PageInfo.CurrentPage)" action="Item"
+                                                   category="@(Model.FilterViewModel.SelectedCategory)"
+                                                   locality="@(Model.FilterViewModel.SelectedLocality)"
+                                                   name="@(Model.FilterViewModel.Name)"
+                                                   sort-view-model="@(Model.SortViewModel)">@(page)</page-link>
+                                    </li>
+                                }
+                                @if (page != Model.PageInfo.CurrentPage)
+                                {
+                                    <li class="li-pag color-pag">
+                                        <page-link page="@(page)" action="Item"
+                                                   category="@(Model.FilterViewModel.SelectedCategory)"
+                                                   locality="@(Model.FilterViewModel.SelectedLocality)"
+                                                   name="@(Model.FilterViewModel.Name)"
+                                                   sort-view-model="@(Model.SortViewModel)">@(page)</page-link>
+                                    </li>
+                                }
+                            }
+                            @if (Model.PageInfo.CurrentPage < Model.PageInfo.TotalPages)
+                            {
+                                <li class="next-pag li-pag color-pag">
+                                    <page-link page="(Model.PageInfo.CurrentPage+1)" action="Item"
+                                               category="@(Model.FilterViewModel.SelectedCategory)"
+                                               locality="@(Model.FilterViewModel.SelectedLocality)"
+                                               name="@(Model.FilterViewModel.Name)"
+                                               sort-view-model="@(Model.SortViewModel)">&gt&gt</page-link>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
         </div>
         <div class="offer-block"></div>
        
     </div>
-
+    
 </div>
