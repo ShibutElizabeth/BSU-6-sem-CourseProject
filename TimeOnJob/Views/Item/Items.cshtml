@@ -1,12 +1,45 @@
 ﻿@model Alia.ViewModels.ItemListViewModel
+@addTagHelper *, Alia
 @{
     ViewBag.Title = "Items";
 }
 
 <div class="background-deli" role="document">
+
     <div class="back-deli-gr">
         <div class="back-deli-shadow">
             <div class="table-deli">
+                <form class="form-filter-2" asp-action="Items" asp-controller="Item" method="get">
+
+                    @Html.DropDownList("category", Model.FilterViewModel.Categories, htmlAttributes: new { @class = "select-filter-2 " })
+                    <select name="region" asp-items="ViewBag.Regions" class="select-filter-2 margin-50" id="region">
+                    </select>
+                    <select name="locality" asp-items="ViewBag.Localities" class="select-filter-2 margin-50" id="locality">
+                    </select>
+                    <script type="text/javascript">
+                    $(function () {
+                        $('#region').change(function()
+                        {
+                            // получаем выбранный id
+                            var id = $(this).val();
+                            $.ajax({
+                                type: 'GET',
+                                url: '@Url.Action("GetLocalities")/' + id,
+                                success: function (data) {
+                                    // заменяем содержимое присланным частичным представлением
+                                    $('#locality').replaceWith(data);
+                                }
+                            });
+                        });
+                    })
+                    </script>
+
+
+
+                    <input class="filter-button-2 margin-50" asp-controller="Item" asp-action="Items" formmethod="get" type="submit" value="Filter">
+
+                </form>
+
                 @foreach (var item in Model.Items)
                 {
                     <div class="tr-deli">
@@ -18,43 +51,100 @@
 
                         </div>
                         <div class="column-deli-2">
-                            <h3 class="h3-deli margin-2">@item.ItemName</h3>
-                            <textarea class="h3-deli margin-40 ta-back-deli" readonly>@item.Description</textarea>
+                            <h3 class="h2-deli margin-2">@item.ItemName</h3>
+                            <textarea class="h2-deli margin-40 ta-back-deli" readonly>@item.Description</textarea>
                         </div>
                         <div class="column-deli-3">
-                            <h3 class="h3-deli margin-2">@item.Price</h3>
-                            <h3 class="h3-deli margin-30">@item.CreatedDate</h3>
+                            <p class="h3-deli margin-2">@item.Price</p>
+                            <p class="h3-deli margin-20">@item.CreatedDate</p>
+
                         </div>
                         <div class="column-deli-4">
-                            <a asp-controller="Item" asp-action="ItemEdit"><img src="/css/img_new/edit.png" width="20" style="line-height: 20px;"></a>
-                            <a asp-controller="Item" asp-action="ItemDelete"><img src="/css/img_new/delete.png" width="20" style="line-height: 20px;"></a>
+                            <a asp-controller="Item" asp-action="ItemEdit" asp-route-id="@item.ItemId"><img src="/css/img_new/edit.png" width="20" style="line-height: 20px;"></a>
+                            <a asp-controller="Item" asp-action="ItemDelete" asp-route-id="@item.ItemId"><img src="/css/img_new/delete.png" width="20" style="line-height: 20px;"></a>
                         </div>
                     </div>
 
                 }
+            <div class="form-filter-2">
+                <div class="block-27" style="position:absolute; margin-left: 230px; margin-top: 40px;">
 
+                    @if (Model.PageInfo.EndPage > 1)
+                    {
+                        <ul class="ul-pag">
+                            @if (Model.PageInfo.CurrentPage > 1)
+                            {
+                                <li class="prev-pag li-pag">
+                                    <page-link page="@(Model.PageInfo.CurrentPage-1)" action="Items"
+                                               category="@(Model.FilterViewModel.SelectedCategory)"
+                                               locality="@(Model.FilterViewModel.SelectedLocality)"
+                                               name="@(Model.FilterViewModel.Name)"
+                                               sort-view-model="@(Model.SortViewModel)">&lt</page-link>
 
-                <div class="tr-deli pagination-deli center">
-                    <div class="pagination center">
-                        @if (Model.PageViewModel.HasPreviousPage)
-                        {
-                            <a asp-controller="Item" asp-action="Items"
-                               asp-route-page="@(Model.PageViewModel.PageNumber - 1)">
-                                Previous
-                            </a>
-                        }
-                        @if (Model.PageViewModel.HasNextPage)
-                        {
-                            <a asp-controller="Item" asp-action="Items"
-                               asp-route-page="@(Model.PageViewModel.PageNumber + 1)">
-                                Next
-                            </a>
-                        }
-                    </div>
-                    
+                                </li>
+                            }
+
+                            @for (var page = Model.PageInfo.StartPage; page <= Model.PageInfo.EndPage; page++)
+                            {
+                                @if (page == Model.PageInfo.CurrentPage)
+                                {
+                                    <li class="li-pag">
+                                        <page-link class="active" page="@(Model.PageInfo.CurrentPage)" action="Items"
+                                                   category="@(Model.FilterViewModel.SelectedCategory)"
+                                                   locality="@(Model.FilterViewModel.SelectedLocality)"
+                                                   name="@(Model.FilterViewModel.Name)"
+                                                   sort-view-model="@(Model.SortViewModel)">@(page)</page-link>
+                                    </li>
+                                }
+                                @if (page != Model.PageInfo.CurrentPage)
+                                {
+                                    <li class="li-pag">
+                                        <page-link page="@(page)" action="Items"
+                                                   category="@(Model.FilterViewModel.SelectedCategory)"
+                                                   locality="@(Model.FilterViewModel.SelectedLocality)"
+                                                   name="@(Model.FilterViewModel.Name)"
+                                                   sort-view-model="@(Model.SortViewModel)">@(page)</page-link>
+                                    </li>
+                                }
+                            }
+                            @if (Model.PageInfo.CurrentPage < Model.PageInfo.TotalPages)
+                            {
+                                <li class="next-pag li-pag">
+                                    <page-link page="(Model.PageInfo.CurrentPage+1)" action="Items"
+                                               category="@(Model.FilterViewModel.SelectedCategory)"
+                                               locality="@(Model.FilterViewModel.SelectedLocality)"
+                                               name="@(Model.FilterViewModel.Name)"
+                                               sort-view-model="@(Model.SortViewModel)">&gt</page-link>
+                                </li>
+                            }
+                        </ul>
+                    }
                 </div>
+            </div>
 
+                @*
+        <div class="tr-deli pagination-deli center">
+            <div class="pagination center">
+                @if (Model.PageViewModel.HasPreviousPage)
+                {
+                    <a asp-controller="Item" asp-action="Items"
+                       asp-route-page="@(Model.PageViewModel.PageNumber - 1)">
+                        Previous
+                    </a>
+                }
+                @if (Model.PageViewModel.HasNextPage)
+                {
+                    <a asp-controller="Item" asp-action="Items"
+                       asp-route-page="@(Model.PageViewModel.PageNumber + 1)">
+                        Next
+                    </a>
+                }
+            </div>
+
+        </div>
+                *@
             </div>
         </div>
+        
     </div>
 </div>

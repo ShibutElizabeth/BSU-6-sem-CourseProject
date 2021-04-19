@@ -21,6 +21,7 @@ namespace Alia.Controllers
             db = context;
         }
 
+        
         public IActionResult Index(int? category, int? locality, string name)
         {
             
@@ -36,9 +37,9 @@ namespace Alia.Controllers
             //new string[] {"Россия","США", "Китай","Индия"}
             //fregions.(0, new Region { RegionId = 0, RegionName = "All"});
             //ViewBag.Regions.Insert(0, new Region { RegionId = 0, RegionName = "All"});
-            SelectList flocalities = new SelectList(db.Localities.Where(c => c.LocalityId == selectedIndex), "LocalityId", "LocalityName");
-            ViewBag.Localities = flocalities;
-
+            
+            SelectList flocalities = new SelectList(db.Localities, "LocalityId", "LocalityName");
+            ViewBag.Localities = flocalities;            
             IQueryable<Item> items = db.Items.Include(p => p.Category).Include(l => l.Locality);
             if (category != null && category != 0)
             {
@@ -56,14 +57,14 @@ namespace Alia.Controllers
             List<Category> categories = db.Categories.ToList();
             List<Locality> localities = db.Localities.ToList();
             // устанавливаем начальный элемент, который позволит выбрать всех
-            categories.Insert(0, new Category { CategoryName = "Things", CategoryId = 0 });
-            //localities.Insert(0, new Locality { LocalityName = "All", LocalityId = 0, RegionId = 0 });
+            categories.Insert(0, new Category { CategoryName = "All", CategoryId = 0 });
+            localities.Insert(0, new Locality { LocalityName = "All", LocalityId = 0, RegionId = 0 });
 
             ItemListViewModel viewModel = new ItemListViewModel
             {
                 Items = items.OrderByDescending(i => i.CreatedDate).ToList(),//удалить сортировку по дате, после написания функции
-                FilterViewModel = new FilterViewModel(categories, category, locality, name)
-                //Categories = new SelectList(categories, "CategoryId", "CategoryName"),
+                FilterViewModel = new FilterViewModel(categories, category, locality, name, localities)
+                
                 //Name = name
             };
             return View(viewModel);
@@ -86,8 +87,9 @@ namespace Alia.Controllers
             //fregions.(0, new Region { RegionId = 0, RegionName = "All"});
             //ViewBag.Regions.Insert(0, new Region { RegionId = 0, RegionName = "All"});
             SelectList flocalities = new SelectList(db.Localities.Where(c => c.LocalityId == selectedIndex), "LocalityId", "LocalityName");
+            
             ViewBag.Localities = flocalities;
-
+            
             IQueryable<Item> items = db.Items.Include(p => p.Category).Include( l => l.Locality);
             
             if (category != null && category != 0)
@@ -120,7 +122,7 @@ namespace Alia.Controllers
             ItemListViewModel viewModel = new ItemListViewModel
             {
                 SortViewModel = sortViewModel,
-                FilterViewModel = new FilterViewModel(db.Categories.ToList(), category, locality, name),
+                FilterViewModel = new FilterViewModel(db.Categories.ToList(), category, locality, name, db.Localities.ToList()),
                 Items = keys,
                 PageInfo = pager
             };

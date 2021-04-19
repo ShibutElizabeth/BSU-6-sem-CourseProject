@@ -2,41 +2,28 @@
 @{
     ViewBag.Title = Model.ItemName;
 }
-<div class="card">
-    <div class="row">
-        <div class="col-lg-4 p-0">
+<div class="back-det">
+    <div class="container-det">
+        <div class="photo-det">
             @if (Model.BigImageData != null)
             {
-                <img class="card-img-top" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.BigImageData))" alt="Card image cap" />
+                <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.BigImageData))" alt="Card image cap" class="img-det" />
+
             }
         </div>
-        <div class="col-lg-8 justify-content-lg-between">
-            <div class="row justify-content-lg-between">
-                <div>
-                    <h5 class="card-title "><strong>@Model.ItemName</strong></h5>
-                    <h6 class="card-title "><strong><span class="icon-layers mr-2 icons-color"></span>  @Model.Category.CategoryName</strong></h6>
-                    <h6 class="card-text"><span class="float-left icon-my_location mr-2 icons-color"></span>  @Model.Locality.LocalityName</h6>
-                </div>
-                <div>
-                    <p class="card-text m-0">@Model.CreatedDate.ToString("dd.MM.yyyy")</p>
-                </div>
-            </div>
-            <p class="card-text mt-3">@Model.Description</p>
-            <div class="card-job-footer">
-                <div>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                </div>
-                <div>
-                    <h5 class="card-text m-0">
-                        <strong>
-                            @if (Model.Price != null)
-                            {
-                                @Model.Price
-                            }  $
-                        </strong>
-                    </h5>
-                </div>
+        <div class="name-det">
+            <p class="h2-det margin-top-name">@Model.ItemName</p>
+            <textarea class="h3-det ta-back-deli margin-top-ta" rows="4" readonly>@Model.Description</textarea>
+            <p class="h2-det" style="text-align:right;"><strong>@Model.Price $</strong></p>
+        </div>
+        <div class="category-det">
+            <p class="h3-det"><span><img src="/css/img_new/category.png" width="20" /></span> @Model.Category.CategoryName</p>
+            <p class="h3-det margin-20"><span><img src="/css/img_new/location.png" width="20" /></span> @Model.Locality.LocalityName</p>
+            <div class="btn-det-block">
+                <button class="btn-det">Buy</button>
+                <button class="btn-det" >Reserve</button>
             </div>
         </div>
     </div>
+    
 </div>

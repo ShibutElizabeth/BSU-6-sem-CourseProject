@@ -52,23 +52,15 @@
                     <li class="li-header dropdown">
                         <a id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
                         <div class="dropdown-content" aria-labelledby="navbarDropdownMenuLink">
-                            <a asp-area="" asp-controller="Item" asp-action="ItemCreate">Create Item</a>
-                            <a asp-area="" asp-controller="Item" asp-action="Items">Items</a>
-                            <a asp-area="" asp-controller="Item" asp-action="Locality">Localities</a>
-                            <a asp-area="" asp-controller="Item" asp-action="Region">Regions</a>
-                            <a asp-area="" asp-controller="Item" asp-action="Category">Categories</a>
-                            <a asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                            <a asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                            <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
-                                <ul class="navbar-nav ml-auto">
-                                    <li class="nav-item">
-                                        @*<a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @User.Identity.Name!</a>*@
-                                        <a class="nav-link">Hello @User.Identity.Name!</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button type="submit" class="btn btn-link navbar-btn navbar-link nav-link">Log out</button>
-                                    </li>
-                                </ul>
+                            <a class="a-drop" asp-area="" asp-controller="Item" asp-action="ItemCreate">Create Item</a>
+                            <a class="a-drop" asp-area="" asp-controller="Item" asp-action="Items">Items</a>
+                            <a class="a-drop" asp-area="" asp-controller="Item" asp-action="Locality">Localities</a>
+                            <a class="a-drop"  asp-area="" asp-controller="Item" asp-action="Region">Regions</a>
+                            <a class="a-drop" asp-area="" asp-controller="Item" asp-action="Category">Categories</a>
+                            <a class="a-drop"  asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                            <a class="a-drop"  asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
+                                  <input type="submit" class="a-drop logout" value="Log out">
                             </form>
                         </div>
 

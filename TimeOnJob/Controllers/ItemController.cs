@@ -341,6 +341,8 @@ namespace Alia.Controllers
         [HttpPost]
         public async Task<IActionResult> ItemDelete(int? id)
         {
+            List<Locality> localities = await db.Localities.ToListAsync();
+            List<Category> categories = await db.Categories.ToListAsync();
             if (id != null)
             {
                 /*NationalCuisine nationalCuisine = await db.NationalCuisine.FirstOrDefaultAsync(p => p.NationalCuisineId == id);
@@ -350,18 +352,19 @@ namespace Alia.Controllers
                     await db.SaveChangesAsync();
                     return RedirectToAction("NationalCuisine");
                 }*/
+                
                 Item item = new Item { ItemId = id.Value };
                 db.Entry(item).State = EntityState.Deleted;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");//в отличии от предыдущего, этот метод - оптимизированный и с проверкой на существование записи в БД
+                return RedirectToAction("Items", "Item");//в отличии от предыдущего, этот метод - оптимизированный и с проверкой на существование записи в БД
             }
             return NotFound();
         }
         public async Task<IActionResult> ItemEdit(int? id)
         {
-            SelectList localities = new SelectList(db.Localities, "LocalityId", "LocalityName");
+            SelectList localities = new SelectList(db.Localities.ToList(), "LocalityId", "LocalityName");
             ViewBag.Localities = localities;
-            SelectList category = new SelectList(db.Categories, "CategoryId", "CategoryName");
+            SelectList category = new SelectList(db.Categories.ToList(), "CategoryId", "CategoryName");
             ViewBag.Categories = category;
 
             if (id != null)
@@ -372,18 +375,144 @@ namespace Alia.Controllers
                 if (item != null)
                     return View(item);
             }
-            return View();
+            return NotFound();
         }
+       
         [HttpPost]
-        public async Task<IActionResult> ItemEdit(Item item)
+        public async Task<IActionResult> ItemEdit(IFormFile uploadedFile, Item item)
         {
-            db.Items.Update(item);
-            await db.SaveChangesAsync();
+            Item editItem = db.Items.Find(item.ItemId);
+            List<Locality> localities = await db.Localities.ToListAsync();
+            List<Category> categories = await db.Categories.ToListAsync();
+            if (uploadedFile != null)
+            {
+
+                
+                Directory.CreateDirectory(_appEnvironment.WebRootPath + "/Temp/");
+                // путь к папке Temp
+                string path = _appEnvironment.WebRootPath + "/Temp/";
+                string shortFileName = uploadedFile.FileName.Substring(uploadedFile.FileName.LastIndexOf('\\') + 1);
+                
+                editItem.FileName = shortFileName;
+
+                using (var fileStream = new FileStream(path + shortFileName, FileMode.Create))
+                {
+                    uploadedFile.CopyTo(fileStream);
+                }
+                byte[] spimgb = null;
+                using (var imgb = Image.Load(path + shortFileName))
+                {
+                    imgb.Mutate(ctx => ctx.Resize(new Size(900, 0)));
+                    imgb.Save(path + "bigImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
+                    spimgb = System.IO.File.ReadAllBytes(path + "bigImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
+                    item.BigImageData = spimgb;
+                }
+                byte[] spimgp = null;
+                using (var imgp = Image.Load(path + shortFileName))
+                {
+                    imgp.Mutate(ctxp => ctxp.Resize(new Size(180, 0)));
+                    imgp.Save(path + "previewImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
+                    spimgp = System.IO.File.ReadAllBytes(path + "previewImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
+                    item.PreviewImageData = spimgp;
+                }
+                byte[] originalImageData = null;
+                using (var binaryReader = new BinaryReader(uploadedFile.OpenReadStream()))
+                {
+                    originalImageData = binaryReader.ReadBytes((int)uploadedFile.Length);
+                }
+                item.OriginalImageData = originalImageData;
+                Directory.Delete(path, true);
+
+                editItem.ItemName = item.ItemName;
+                editItem.Description = item.Description;
+                editItem.Price = item.Price;
+                editItem.BigImageData = spimgb;
+                editItem.PreviewImageData = spimgp;
+
+                db.Items.Update(editItem);
+                await db.SaveChangesAsync();
+            }
+            else
+            {
+                editItem.ItemName = item.ItemName;
+                editItem.Price = item.Price;
+                editItem.Description = item.Description;
+
+                db.Items.Update(editItem);
+                await db.SaveChangesAsync();
+            }
             return RedirectToAction("Items", "Item");
         }
-        public async Task<IActionResult> Items(int page=1)
+        public IActionResult Items(int? category, int? locality, string name, int? page, SortState sortOrder)
         {
-            
+            string pfl = "";
+
+            //Динамическая загрузка списка по выбору из другого списка
+            int selectedIndex = 0;
+            Region zerorid = new Region { RegionId = 0, RegionName = "All" };
+            db.Regions.Add(zerorid);
+            Locality zerolid = new Locality { LocalityId = 0, LocalityName = "All", RegionId = 0 };
+            db.Localities.Add(zerolid);
+            SelectList fregions = new SelectList(db.Regions, "RegionId", "RegionName", selectedIndex);
+            //fregions = new SelectList(new string[] { "All" });
+            ViewBag.Regions = fregions;
+            //new string[] {"Россия","США", "Китай","Индия"}
+            //fregions.(0, new Region { RegionId = 0, RegionName = "All"});
+            //ViewBag.Regions.Insert(0, new Region { RegionId = 0, RegionName = "All"});
+            SelectList flocalities;
+            if (selectedIndex != 0)
+            {
+                flocalities = new SelectList(db.Localities.Where(c => c.LocalityId == selectedIndex), "LocalityId", "LocalityName");
+            }
+            else
+            {
+                flocalities = new SelectList(db.Localities, "LocalityId", "LocalityName");
+            }
+            ViewBag.Localities = flocalities;
+
+            IQueryable<Item> items = db.Items.Include(p => p.Category).Include(l => l.Locality);
+
+            if (category != null && category != 0)
+            {
+                items = items.Where(p => p.CategoryId == category);
+            }
+            if (!String.IsNullOrEmpty(name))
+            {
+                items = items.Where(p => p.Description.Contains(name));
+            }
+            if (locality != null && locality != 0)
+            {
+                items = items.Where(p => p.LocalityId == locality);
+            }
+
+            items = sortOrder switch
+            {
+                SortState.DateDesc => items.OrderByDescending(s => s.CreatedDate),
+                SortState.PriceAsc => items.OrderBy(s => s.Price),
+                SortState.PriceDesc => items.OrderByDescending(s => s.Price),
+                SortState.DateAsc => items.OrderBy(s => s.CreatedDate),
+
+            };
+            SortViewModel sortViewModel = new SortViewModel(sortOrder);
+            var count = items.Count();
+            var pager = new PageInfo(count, page, pfl);
+            var keys = items.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList();
+
+
+            ItemListViewModel viewModel = new ItemListViewModel
+            {
+                SortViewModel = sortViewModel,
+                FilterViewModel = new FilterViewModel(db.Categories.ToList(), category, locality, name, db.Localities.ToList()),
+                Items = keys,
+                PageInfo = pager
+            };
+
+            return View(viewModel);
+        }
+        /*public async Task<IActionResult> Items(int page=1)
+        {
+            List<Locality> localities = await db.Localities.ToListAsync();
+            List<Category> categories = await db.Categories.ToListAsync();
             int pageSize = 3;   // количество элементов на странице
 
             IQueryable<Item> source = db.Items;
@@ -398,6 +527,14 @@ namespace Alia.Controllers
             };
             return View(viewModel);
             
+        }*/
+        public ActionResult GetLocalities(int id)
+        {
+            Region zerorid = new Region { RegionId = 0, RegionName = "All" };
+            db.Regions.Add(zerorid);
+            Locality zerolid = new Locality { LocalityId = 0, LocalityName = "All", RegionId = 0 };
+            db.Localities.Add(zerolid);
+            return PartialView(db.Localities.Where(c => c.RegionId == id).ToList());
         }
 
     }

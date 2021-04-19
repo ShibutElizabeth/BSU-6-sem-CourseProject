@@ -76,7 +76,24 @@
         font-family: inherit;
         margin: 0;
     }
+
+.logout {
+    
+    font-family: "Gabriola", Gabriola, serif;
+    width:85%;
+    border:none;
+    font-size:60px;
+    background-color:transparent;
+    height:60px;
+    padding:0px 0px 0px 0px;
+    
+}
+    .logout:hover {
+        background-color: #ddd;
+        cursor:pointer;
+    }
 .dropdown-content {
+   
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -86,7 +103,7 @@
     margin-top: 20px;
 }
 
-    .dropdown-content a {
+    .dropdown-content .a-drop{
         float: none;
         color: #757c97;
         padding: 12px 16px;
@@ -96,9 +113,9 @@
         margin: 20px;
     }
 
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
+    .dropdown-content .a-drop:hover {
+        background-color: #ddd;
+    }
 
 .dropdown:hover .dropdown-content {
     display: block;
@@ -708,8 +725,9 @@ div.gallery {
     }
 
     div.gallery img {
-        width: 100%;
-        height: auto;
+        width: 240px;
+        height: 240px;
+        margin:10px;
     }
 
 div.desc {
@@ -981,7 +999,63 @@ div.desc {
     height: 900px;
     margin-left: 369px;
 }
+.filter-block-2 {
+    padding-top:30px;
+    margin-left:400px;
+    display: inline-block;
+    width: 740px;
+}
+.form-filter-2 .input-filter-2, .select-filter-2, option {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #cccbc9;
+    width: 160px;
+    height: 40px;
+    border-radius: 15px;
+    border-color: transparent;
+    font-family: "Javanese Text", Javanese Text, serif;
+    font-size: 20px;
+    font-weight: 200;
+    text-align: center;
+    margin: 10px;
+    margin-left: 20px;
+}
 
+.form-filter-2 .select-filter-2 {
+    text-align: center;
+}
+
+.form-filter-2 .input-filter-2::placeholder {
+    background-color: #ffffff;
+    color: #cccbc9;
+    width: 160px;
+    height: 40px;
+    border-radius: 15px;
+    border-color: transparent;
+}
+
+.input-filter-2:focus {
+    border-color: transparent;
+    border-radius: 15px;
+}
+
+.filter-button-2 {
+    background-color: #ffffff;
+    font-family: "Javanese Text", Javanese Text, serif;
+    font-size: 20px;
+    font-weight: 200;
+    color: #808274;
+    width: 120px;
+    height: 40px;
+    border-radius: 15px;
+    border-color: transparent;
+    margin-left: 10px;
+}
+
+    .filter-button:hover {
+        background-color: #cfc7c4;
+        color: white;
+    }
 .table-deli {
     padding-top: 40px;
     font-size: 40px;
@@ -1030,6 +1104,9 @@ div.desc {
 .margin-20 {
     margin-top: -20px;
 }
+.margin-50 {
+    margin-top: -50px;
+}
 
 .margin-40 {
     margin-top: -40px;
@@ -1048,12 +1125,12 @@ div.desc {
 
 .column-deli-3 {
     float: left;
-    width: 25%;
+    width: 20%;
 }
 
 .column-deli-4 {
     float: left;
-    width: 10%;
+    width: 15%;
 }
 
 .photo-deli {
@@ -1064,6 +1141,13 @@ div.desc {
 }
 
 .h3-deli {
+    text-align: left;
+    font-size: 20px;
+    font-weight: 200;
+    font-family: "Gabriola", Gabriola, serif;
+    color: #212e28;
+}
+.h2-deli {
     text-align: left;
     font-size: 30px;
     font-weight: 300;
@@ -1113,3 +1197,207 @@ div.desc {
 .center {
     text-align: center;
 }
+.btn-deli {
+    color: white;
+    background-color: #212e28;
+    border-radius: 10px;
+    max-width: 30px;
+    max-height: 30px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 200;
+    font-family: "Gabriola", Gabriola, serif;
+    border-color: transparent;
+}
+    .btn-deli:hover {
+        color: #212e28
+        background-color: #ddd;
+    }
+
+/* --------------------------------------------------------------------------------- */
+
+/* ------------------------------NEW PAGE ItemDetail------------------------------- */
+.back-det {
+    background-image: url('img_new/BackDetail.jpg');
+    width: 1519px;
+    height: 800px;
+    margin-left: -7px;
+    margin-top: -37px;
+}
+.container-det {
+    padding-top: 230px;
+    display: grid;
+    grid-template-columns: 35px 450px 200px 300px;
+    grid-template-rows: auto;
+    column-gap: 10px;
+    grid-template-areas: ". photo-det . name-det cat-det ";
+}
+.photo-det {
+    height: 450px;
+    width: 450px;
+    
+    grid-area: photo-det;
+}
+    .photo-det .img-det {
+        height: 500px;
+        width: 500px;
+        box-shadow: 20px 20px 15px rgba(0, 0, 0, 0.5);
+    }
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #008CBA;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    transform: scale(0);
+    transition: .3s ease;
+}
+
+/*  огда вы наведете курсор мыши на контейнер, текст наложени€ будет "масштабироватьс€" на дисплее */
+.container:hover .overlay {
+    transform: scale(1);
+}
+
+/* Ќекоторый текст внутри накладка, котора€ расположена посередине вертикально и горизонтально */
+.text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.name-det {
+    margin-top: 10px;
+    margin-left:-30px;
+    background-color: transparent;
+    width: 200px;
+    height: auto;
+    grid-area: name-det;
+    text-align: left;
+    
+    font-family: "Gabriola", Gabriola, serif;
+    color: #212e28;
+}
+.category-det {
+    margin-left: 47px;
+    margin-top: 60px;
+    background-color: transparent;
+    width: 300px;
+    height: auto;
+    grid-area: cat-det;
+    text-align: left;
+    font-family: "Javanese Text", Javanese Text, serif;
+    color: #212e28;
+}
+.h3-det {
+    text-align: left;
+    font-size: 30px;
+    font-weight: 200;
+    font-family: "Javanese Text", Javanese Text, serif;
+    color: #212e28;
+}
+.h2-det {
+    position: absolute;
+    text-align: left;
+    font-size: 50px;
+    font-weight: 300;
+    font-family: "Javanese Text", Javanese Text, serif;
+    color: #212e28;
+}
+.margin-top-ta {
+    margin-top: 105px;
+    line-height: 1.1em;
+    color: #435e52;
+}
+.margin-top-name{
+    font-size: 60px;
+    
+    margin-top: -7px;
+}
+
+.block-27 .ul-pag {
+    padding: 0;
+    margin: 0;
+}
+
+    .block-27 .ul-pag .li-pag {
+        font-family: "Gabriola", Gabriola, serif;
+        display: inline-block;
+        margin-bottom: 4px;
+        font-weight: 400;
+    }
+
+        .block-27 .ul-pag .li-pag a, .block-27 .ul-pag .li-pag span {
+            border-radius: 5px;
+            transition: background-color .3s;
+            color: black;
+            text-align: center;
+
+            display: inline-block;
+            padding: 8px 16px
+        }
+
+.block-27 .ul-pag .li-pag .previous-off, .next-off {
+    color: white;
+    text-align: center;
+    display: inline-block;
+    padding: 8px 16px
+}
+
+.block-27 .ul-pag .li-pag .prev-pag a, .next-pag a {
+    border-radius: 5px;
+    transition: background-color .3s;
+    color: black;
+    background-color:transparent;
+    text-align: center;
+    display: inline-block;
+    padding: 8px 16px
+}
+
+        .block-27 .ul-pag .li-pag .active, .block-27 .ul-pag .li-pag.active span {
+            border-radius: 5px;
+            background-color: #5e9173;
+            color: white;
+        }
+
+        .block-27 .ul-pag .li-pag a:hover:not(.active) {
+            border-radius: 5px;
+            background-color: #9eb8ab;
+            color: white;
+        }
+
+.center {
+    text-align: center;
+}
+.color-pag {
+    background-color: white;
+    color: #564f43;
+}
+.btn-det-block {
+    margin-left: 20px;
+    margin-left:-20px;
+    display: inline-block;
+    margin-top: 55px;
+    color:white;
+}
+.btn-det {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 200;
+    font-family: "Javanese Text", Javanese Text, serif;
+    color: white;
+    border-radius: 10px;
+    width: 130px;
+    height: 60px;
+    background-color: #87a294;
+    border-color:transparent;
+}
+    .btn-det:hover {
+        background-color: #4f6057;
+        cursor:pointer;
+    }
