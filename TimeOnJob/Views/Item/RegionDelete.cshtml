@@ -2,22 +2,24 @@
 @{
     ViewBag.Title = "Region delete";
 }
-
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-body">
-            <table class="table">
-                <tr><th>id</th><th>name</th></tr>
-                <tr>
-                    <td>@Html.DisplayFor(model => model.RegionId)</td>
-                    <td>@Html.DisplayFor(model => model.RegionName)</td>
-                </tr>
-                <form asp-controller="Item" asp-action="RegionDelete" method="post">
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Delete region</button>
-                    </div>
-                </form>
+    <div class="back-table" style="height:600px;" role="document">
+        <div class="back-tbl center" style="margin-top: 30px;">
+            <table style="margin-left:78px;">
+                <thead>
+                    <tr><th>ID</th><th>Name</th><th></th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.RegionId)</td>
+                        <td>@Html.DisplayFor(model => model.RegionName)</td>
+                        <td>
+                            <form asp-controller="Item" asp-action="RegionDelete" method="post">
+                                <button type="submit" class="top-btn"><img src="/css/img_new/delete.png" width="30" /></button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
+
         </div>
     </div>
-</div>

@@ -15,7 +15,7 @@ namespace Alia.ViewModels
         
         public Item Item { get; set; }
         public PageInfo PageInfo { get; set; }
-        public PageViewModel PageViewModel { get; set; }
+        
        public SortViewModel SortViewModel { get; set; }
     }
 }

@@ -1,21 +1,17 @@
 ﻿@model string
+    <div asp-validation-summary="All" class="text-danger">
 
-<div asp-validation-summary="All" class="text-danger">
-    
-</div>
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Add new role</h5>
-        </div>
-        <div class="modal-body">
+    </div>
+    <div class="back-table" style="height:600px;" role="document">
+        <div class="back-tbl center form-filter-2" style="margin-top: 30px;">
+            <label class="text-top">New role</label>
             <form asp-action="Create" method="post">
-                <div class="form-group">
-                    <label for="name">New Role</label>
-                    <input name="name" class="form-control" />
+                <div class="form-filter">
+                    <label for="name" class="text-top" style="margin-top: 20px;">Name</label>
+                    <input name="name" class="input-filter-2" />
                 </div>
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" class="filter-button-2">Add</button>
             </form>
+
         </div>
     </div>
-</div>

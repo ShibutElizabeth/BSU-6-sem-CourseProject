@@ -3,29 +3,37 @@
     ViewData["Title"] = "Category";
 }
 
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-body">
-            <a class="btn btn-primary" asp-action="CategoryCreate">Create Category</a>
-            <table class="table">
-                <thead>
-                    <tr><th>id</th><th>name</th></tr>
-                </thead>
+<div class="back-table" role="document">
+    <div class="back-tbl center" style="margin-top: 30px;">
+        <label class="text-top">Create category</label>
+        <a class="top-btn" asp-action="CategoryCreate"><img src="/css/img_new/add.png" width="30" /></a>
+        <table style="margin-left: 78px;">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach (var item in Model)
                 {
-                <tbody>
+
                     <tr>
                         <td>@item.CategoryId</td>
                         <td>@item.CategoryName</td>
                         <td>
                             @*<a asp-action="DetailsMeasuringSystem" asp-controller="Job" asp-route-id="@item.MeasuringSystemId">Details</a> |*@
-                            <a class="btn btn-success" asp-action="CategoryEdit" asp-controller="Item" asp-route-id="@item.CategoryId">Edit</a> |
-                            <a class="btn btn-danger" asp-action="CategoryDelete" asp-controller="Item" asp-route-id="@item.CategoryId">Delete</a> |
+                            <a asp-controller="Item" asp-action="CategoryEdit" asp-route-id="@item.CategoryId"><img src="/css/img_new/edit.png" width="20" style="line-height: 20px;"></a>
+                            <a asp-controller="Item" asp-action="CategoryDelete" asp-route-id="@item.CategoryId"><img src="/css/img_new/delete.png" width="20" style="line-height: 20px;"></a>
+
                         </td>
                     </tr>
-                </tbody>
+
                 }
-            </table>
-        </div>
+            </tbody>
+
+        </table>
+
     </div>
 </div>

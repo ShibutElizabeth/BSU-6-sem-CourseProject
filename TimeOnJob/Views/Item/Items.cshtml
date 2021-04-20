@@ -9,33 +9,12 @@
     <div class="back-deli-gr">
         <div class="back-deli-shadow">
             <div class="table-deli">
-                <form class="form-filter-2" asp-action="Items" asp-controller="Item" method="get">
+                <form class="form-filter-2 center" asp-action="Items" asp-controller="Item" method="get">
 
                     @Html.DropDownList("category", Model.FilterViewModel.Categories, htmlAttributes: new { @class = "select-filter-2 " })
-                    <select name="region" asp-items="ViewBag.Regions" class="select-filter-2 margin-50" id="region">
-                    </select>
                     <select name="locality" asp-items="ViewBag.Localities" class="select-filter-2 margin-50" id="locality">
                     </select>
-                    <script type="text/javascript">
-                    $(function () {
-                        $('#region').change(function()
-                        {
-                            // получаем выбранный id
-                            var id = $(this).val();
-                            $.ajax({
-                                type: 'GET',
-                                url: '@Url.Action("GetLocalities")/' + id,
-                                success: function (data) {
-                                    // заменяем содержимое присланным частичным представлением
-                                    $('#locality').replaceWith(data);
-                                }
-                            });
-                        });
-                    })
-                    </script>
-
-
-
+                    
                     <input class="filter-button-2 margin-50" asp-controller="Item" asp-action="Items" formmethod="get" type="submit" value="Filter">
 
                 </form>
@@ -122,27 +101,7 @@
                 </div>
             </div>
 
-                @*
-        <div class="tr-deli pagination-deli center">
-            <div class="pagination center">
-                @if (Model.PageViewModel.HasPreviousPage)
-                {
-                    <a asp-controller="Item" asp-action="Items"
-                       asp-route-page="@(Model.PageViewModel.PageNumber - 1)">
-                        Previous
-                    </a>
-                }
-                @if (Model.PageViewModel.HasNextPage)
-                {
-                    <a asp-controller="Item" asp-action="Items"
-                       asp-route-page="@(Model.PageViewModel.PageNumber + 1)">
-                        Next
-                    </a>
-                }
-            </div>
-
-        </div>
-                *@
+               
             </div>
         </div>
         

@@ -2,22 +2,16 @@
 @{
     ViewData["Title"] = "Add region";
 }
-
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Create region</h5>
-        </div>
-        <div class="modal-body">
-            <form asp-action="RegionCreate" asp-controller="Item">
-                <div class="form-group">
-                    <label asp-for="RegionName" class="control-label">Name</label>
-                    <input type="text" asp-for="RegionName" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Send</button>
-                </div>
-            </form>
-        </div>
+<div class="back-table" style="height:600px;" role="document">
+    <div class="back-tbl center" style="margin-top: 30px;">
+        <label class="text-top">New region</label>
+        <form asp-action="RegionCreate" asp-controller="Item" class="form-filter-2">
+            
+                <label asp-for="RegionName" class="text-top">Name</label>
+                <input type="text" asp-for="RegionName" class="input-filter-2" />
+                <button type="submit" class="filter-button-2">Add</button>
+            
+        </form>
+       
     </div>
 </div>

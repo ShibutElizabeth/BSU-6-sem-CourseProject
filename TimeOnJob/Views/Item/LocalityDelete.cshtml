@@ -2,46 +2,25 @@
 @{
     ViewBag.Title = "Removal locality";
 }
-
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-body">
-            <table>
+    <div class="back-table" style="height:600px;" role="document">
+        <div class="back-tbl center" style="margin-top: 30px;">
+            <table style="margin-left:78px;">
                 <thead>
-                    <tr><th>id</th><th>name</th><th>product type id</th></tr>
+                    <tr><th>ID</th><th>Name</th><th>Region ID</th><th></th></tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>@Html.DisplayFor(model => model.LocalityId)</td>
                         <td>@Html.DisplayFor(model => model.LocalityName)</td>
                         <td>@Html.DisplayFor(model => model.RegionId)</td>
+                        <td>
+                            <form asp-controller="Item" asp-action="LocalityDelete" method="post">
+                                <button type="submit" class="top-btn"><img src="/css/img_new/delete.png" width="30" /></button>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>
-            @*<dl class="dl-horizontal">
-                <dt>id</dt>
-                <dd>
-                    @Html.DisplayFor(model => model.LocalityId)
-                </dd>
-
-                <dt>name</dt>
-                <dd>
-                    @Html.DisplayFor(model => model.LocalityName)
-                </dd>
-
-                <dt>product type id</dt>
-                <dd>
-                    @Html.DisplayFor(model => model.RegionId)
-                </dd>
-            </dl>*@
-
-            <div>
-                <form asp-controller="Item" asp-action="LocalityDelete" method="post">
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-default">Delete locality</button>
-                    </div>
-                </form>
-            </div>
+            
         </div>
     </div>
-</div>
