@@ -2,28 +2,24 @@
 @{
     ViewBag.Title = "Add a user";
 }
-
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-body">
-            <form asp-action="Create" asp-controller="Users">
+    <div class="back-table" style="height:600px;" role="document">
+        <div class="back-tbl center form-filter-2" style="margin-top: 30px;">
+            <form asp-action="Create" asp-controller="Users" class="form-filter-2 container-user-cr">
                 <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="UserName" class="control-label">UserName</label>
-                    <input type="text" asp-for="UserName" class="form-control" />
+                <div class="text-user-cr">
+                    <label asp-for="UserName" class="text-top" style="text-align:right;">UserName</label>
+                    <label asp-for="Email" class="text-top" style="text-align:right;">Email</label>
+                    <label asp-for="Password" class="text-top" style="text-align:right;">Password</label>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Email" class="control-label">Email</label>
-                    <input type="text" asp-for="Email" class="form-control" />
+                <div class="input-user-cr">
+                    <input type="text" asp-for="UserName" class="input-filter-2" />
+                    <input type="text" asp-for="Email" class="input-filter-2" style="margin-top: 20px;"/>
+                    <input type="text" asp-for="Password" class="input-filter-2" style="margin-top: 20px;" />
                 </div>
-                <div class="form-group">
-                    <label asp-for="Password" class="control-label">Password</label>
-                    <input type="text" asp-for="Password" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Add</button>
+                <div class="filter-block-3">
+                    <button type="submit" class="filter-button-2">Add</button>
                 </div>
             </form>
+            
         </div>
     </div>
-</div>

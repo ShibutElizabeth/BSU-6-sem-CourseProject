@@ -176,8 +176,12 @@ namespace Alia.Controllers
             return NotFound();
         }
 
-        public async Task<IActionResult> Locality(string localityName)
+        public async Task<IActionResult> Locality(string localityName, int page=1)
         {
+            int pageSize = 8;   // количество элементов на странице
+
+            IQueryable<Item> source = db.Items;
+            
             List<Region> regions = await db.Regions.ToListAsync();
             IQueryable<Locality> localities = db.Localities;
 
@@ -185,10 +189,14 @@ namespace Alia.Controllers
             {
                 localities = localities.Where(p => p.LocalityName.Contains(localityName));
             }
+            var count = await localities.CountAsync();
+            var items = await localities.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
             LocalitiesListViewModel viewModels = new LocalitiesListViewModel
             {
-                Localities = localities.ToList(),
+                Localities = items.ToList(),
+                PageViewModel = pageViewModel,
                 Name = localityName
             };
             return View(viewModels);

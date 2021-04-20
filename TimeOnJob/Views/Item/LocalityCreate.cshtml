@@ -2,30 +2,23 @@
 @{
     ViewData["Title"] = "Add Locality";
 }
+<div class="back-table" style="height:600px;" role="document">
+    <div class="back-tbl center" style="margin-top: 30px;">
+        <label class="text-top">New locality</label>
+        <form asp-action="LocalityCreate" asp-controller="Item">
+            <div class="container-user-cr">
+                <div class="text-user-cr">
+                    <label asp-for="LocalityName" class="text-top">Name</label>
+                    <label asp-for="RegionId" class="text-top">Region</label>
+                </div>
+                <div class="input-user-cr">
+                    <input type="text" asp-for="LocalityName" class="input-filter-2" />
+                    @Html.DropDownListFor(model => model.RegionId, ViewBag.Regions as SelectList, htmlAttributes: new { @class = "select-filter-2 margin-top-20" })
+                </div>    
+            </div>
+            <button type="submit" class="filter-button-2">Add</button>
 
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-body">
-            @using (Html.BeginForm())
-            {
-                <fieldset>
-                    <legend>Locality</legend>
+        </form>
 
-                    <p>
-                        Locality name <br />
-                        @Html.EditorFor(model => model.LocalityName)
-                    </p>
-
-                    <p>
-                        Region <br />
-                        @Html.DropDownListFor(model => model.RegionId, ViewBag.Regions as SelectList)
-                    </p>
-
-                    <p>
-                        <button class="btn btn-primary">Add locality</button>
-                    </p>
-                </fieldset>
-            }
-        </div>
     </div>
 </div>

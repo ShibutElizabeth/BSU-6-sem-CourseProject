@@ -3,40 +3,66 @@
     ViewData["Title"] = "Locality";
 }
 
-<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-body">
-            <form asp-action="Locality" asp-controller="Item" method="get">
-                <div class="form-inline form-group">
-                    <label class="control-label">Search: </label>
-                    @Html.TextBox("localityName", Model.Name, htmlAttributes: new { @class = "form-control" })
+ <div class="back-table" role="document">
+     <div class="back-tbl center">
+         <form class="form-filter-2" asp-action="Locality" asp-controller="Item" method="get">
+             <div style="margin-top: 20px; ">
+                 <label class="text-top">Search: </label>
+                 @Html.TextBox("localityName", Model.Name, htmlAttributes: new { @class = "input-top" })
+            
+                 <button type="submit" class="top-btn " style="margin-top: 10px;"><img src="/css/img_new/search.png" width="30" /></button>
+                 <a class="top-btn" asp-action="LocalityCreate" style="margin-top: 10px;"><img src="/css/img_new/add.png" width="30" /></a>
+             
+             </div>
+         </form>
+         <table style="margin-left: 78px;">
+             <thead>
+                 <tr>
+                     <th scope="col">ID</th>
+                     <th scope="col">Name</th>
+                     <th scope="col">Region</th>
+                     <th scope="col"></th>
+                 </tr>
+             </thead>
+             @foreach (var item in Model.Localities)
+             {
+                 <tbody>
+                     <tr>
+                         <td>@item.LocalityId</td>
+                         <td>@item.LocalityName</td>
+                         <td>@item.Region.RegionName</td>
+                         <td>
+                             @*<a asp-action="LocalityDetails" asp-controller="Job" asp-route-id="@item.LocalityId">Details</a> |*@
+                             <a asp-controller="Item" asp-action="LocalityEdit" asp-route-id="@item.LocalityId"><img src="/css/img_new/edit.png" width="20" style="line-height: 20px;"></a>
+                             <a asp-controller="Item" asp-action="LocalityDelete" asp-route-id="@item.LocalityId"><img src="/css/img_new/delete.png" width="20" style="line-height: 20px;"></a>
+                         </td>
+                     </tr>
+                 </tbody>
+             }
+         </table>
+        
+        <div class=" form-filter-2 center" style="margin-top: 20px; font-size:30px; text-decoration:none;">
+            <div class="block-27 center">
 
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                    <a class="btn btn-primary" asp-action="LocalityCreate">Create locality</a>
-                </div>
-            </form>
+                @if (Model.PageViewModel.HasPreviousPage)
+                {
+                    <a class="a-pag" asp-controller="Item" asp-action="Locality"
+                       asp-route-page="@(Model.PageViewModel.PageNumber - 1)">
+                        &lt&lt
+                    </a>
+                }
+                @if (Model.PageViewModel.HasNextPage)
+                {
+                    <a class="a-pag" asp-controller="Item" asp-action="Locality"
+                       asp-route-page="@(Model.PageViewModel.PageNumber + 1)">
+                        &gt&gt
+                    </a>
+                }
+            </div>
+
         </div>
-    </div>
-</div>
-<table class="table table-sm table-hover">
-    <thead class="thead-light">
-        <tr><th>id</th><th>name</th><th>region id</th><th>region name</th></tr>
-    </thead>
-    @foreach (var item in Model.Localities)
-    {
-        <tbody>
-            <tr>
-                <td>@item.LocalityId</td>
-                <td>@item.LocalityName</td>
-                <td>@item.RegionId</td>
-                <td>@item.Region.RegionName</td>
-                <td>
-                    @*<a asp-action="LocalityDetails" asp-controller="Job" asp-route-id="@item.LocalityId">Details</a> |*@
-                    <a class="btn btn-success" asp-action="LocalityEdit" asp-controller="Item" asp-route-id="@item.LocalityId">Edit</a> |
-                    <a class="btn btn-danger" asp-action="LocalityDelete" asp-controller="Item" asp-route-id="@item.LocalityId">Delete</a> |
-                </td>
-            </tr>
-        </tbody>
-    }
-</table>
+        
 
+     </div>
+
+</div>

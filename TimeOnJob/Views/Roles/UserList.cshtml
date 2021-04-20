@@ -1,22 +1,31 @@
 ﻿@model IEnumerable<Alia.Models.User>
 
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">User List</h5>
-            </div>
-            <div class="modal-body">
-                <table class="table">
+    <div class="back-table"style="height:auto;" role="document">
+        <div class="back-tbl center" style="margin-top: 30px;">
+            <label class="text-top">User List</label>
+            <table style="margin-left: 180px;">
+                <thead>
+                    <tr>
+                        <th scope="col" style="display: none;"></th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Access</th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach (var user in Model)
                     {
-                        <tr>
-                            <td>@user.Email</td>
-                            <td class="text-right">
-                                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-userid="@user.Id">Access rights</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td style="display:none;"></td>
+                        <td>@user.Email</td>
+                        <td>
+                            <a class="top-btn" asp-action="Edit" asp-route-userid="@user.Id"><img src="/css/img_new/edit.png" width="30" style="line-height: 30px;"></a>
+                        </td>
+                        
+                    </tr>
                     }
-                </table>
-            </div>
+                </tbody>
+
+            </table>
+
         </div>
     </div>

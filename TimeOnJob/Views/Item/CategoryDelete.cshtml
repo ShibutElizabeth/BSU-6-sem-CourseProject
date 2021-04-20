@@ -3,21 +3,21 @@
     ViewBag.Title = "Category delete";
 }
 
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-body">
-            <table class="table">
-                <tr><th>id</th><th>name</th></tr>
-                <tr>
-                    <td>@Html.DisplayFor(model => model.CategoryId)</td>
-                    <td>@Html.DisplayFor(model => model.CategoryName)</td>
-                </tr>
-                <form asp-controller="Item" asp-action="CategoryDelete" method="post">
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Delete category</button>
-                    </div>
-                </form>
-            </table>
-        </div>
+<div class="back-table" style="height:600px;" role="document">
+    <div class="back-tbl center" style="margin-top: 30px;">
+        <table style="margin-left:220px;">
+            <tr><th>ID</th><th>Name</th><th></th></tr>
+            <tr>
+                <td>@Html.DisplayFor(model => model.CategoryId)</td>
+                <td>@Html.DisplayFor(model => model.CategoryName)</td>
+                <td>
+                    <form asp-controller="Item" asp-action="CategoryDelete" method="post" class="form-filter-2">
+                        <button type="submit" class="top-btn"><img src="/css/img_new/delete.png" width="30" /></button>
+                    </form>
+                </td>
+            </tr>
+
+        </table>
+
     </div>
 </div>

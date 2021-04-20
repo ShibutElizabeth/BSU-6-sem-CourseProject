@@ -115,7 +115,7 @@ namespace Alia.Controllers
             };
             SortViewModel sortViewModel = new SortViewModel(sortOrder);
             var count = items.Count();
-            var pager = new PageInfo(count, page, pfl);
+            var pager = new PageInfo(count, page, pfl, 6);
             var keys = items.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize).ToList();
 
 
