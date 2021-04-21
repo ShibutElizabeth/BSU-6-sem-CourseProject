@@ -22,5 +22,7 @@ namespace Alia.Models
         public Locality Locality { get; set; }
         //public Region Region { get; set; }
         public Category Category { get; set; }
+        public int IsReserved { get; set; }
+       
     }
 }
