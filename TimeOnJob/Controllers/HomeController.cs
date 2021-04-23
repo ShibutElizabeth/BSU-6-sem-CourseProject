@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
 using Alia.Models;
 using Alia.ViewModels;
+using System.Net.Mail;
+using System.Net;
 
 namespace Alia.Controllers
 {
@@ -21,27 +23,19 @@ namespace Alia.Controllers
             db = context;
         }
 
-        
         public IActionResult Index(int? category, int? locality, string name)
         {
             
             //Динамическая загрузка списка по выбору из другого списка
-            int selectedIndex = 0;
-            Region zerorid = new Region { RegionId = 0, RegionName = "All" };
-            db.Regions.Add(zerorid);
-            Locality zerolid = new Locality { LocalityId = 0, LocalityName = "All", RegionId = 0 };
-            db.Localities.Add(zerolid);
+            int selectedIndex = 1;
+            
             SelectList fregions = new SelectList(db.Regions, "RegionId", "RegionName", selectedIndex);
-            //fregions = new SelectList(new string[] { "All" });
             ViewBag.Regions = fregions;
-            //new string[] {"Россия","США", "Китай","Индия"}
-            //fregions.(0, new Region { RegionId = 0, RegionName = "All"});
-            //ViewBag.Regions.Insert(0, new Region { RegionId = 0, RegionName = "All"});
             
             SelectList flocalities = new SelectList(db.Localities, "LocalityId", "LocalityName");
             ViewBag.Localities = flocalities;            
             IQueryable<Item> items = db.Items.Include(p => p.Category).Include(l => l.Locality);
-            if (category != null && category != 0)
+            if (category != null && category != 1)
             {
                 items = items.Where(p => p.CategoryId == category);
             }
@@ -49,23 +43,18 @@ namespace Alia.Controllers
             {
                 items = items.Where(p => p.Description.Contains(name));
             }
-            if (locality != null && locality != 0)
+            if (locality != null && locality != 1)
             {
                 items = items.Where(p => p.LocalityId == locality);
             }
 
             List<Category> categories = db.Categories.ToList();
             List<Locality> localities = db.Localities.ToList();
-            // устанавливаем начальный элемент, который позволит выбрать всех
-            categories.Insert(0, new Category { CategoryName = "All", CategoryId = 0 });
-            localities.Insert(0, new Locality { LocalityName = "All", LocalityId = 0, RegionId = 0 });
-
+            
             ItemListViewModel viewModel = new ItemListViewModel
             {
-                Items = items.OrderByDescending(i => i.CreatedDate).ToList(),//удалить сортировку по дате, после написания функции
+                Items = items.OrderByDescending(i => i.CreatedDate).ToList(),
                 FilterViewModel = new FilterViewModel(categories, category, locality, name, localities)
-                
-                //Name = name
             };
             return View(viewModel);
         }
@@ -75,24 +64,15 @@ namespace Alia.Controllers
             string pfl = "";
 
             //Динамическая загрузка списка по выбору из другого списка
-            int selectedIndex = 0;
-            Region zerorid = new Region { RegionId = 0, RegionName = "All" };
-            db.Regions.Add(zerorid);
-            Locality zerolid = new Locality { LocalityId = 0, LocalityName = "All", RegionId = 0 };
-            db.Localities.Add(zerolid);
+            int selectedIndex = 1;
             SelectList fregions = new SelectList(db.Regions, "RegionId", "RegionName", selectedIndex);
-            //fregions = new SelectList(new string[] { "All" });
             ViewBag.Regions = fregions;
-            //new string[] {"Россия","США", "Китай","Индия"}
-            //fregions.(0, new Region { RegionId = 0, RegionName = "All"});
-            //ViewBag.Regions.Insert(0, new Region { RegionId = 0, RegionName = "All"});
             SelectList flocalities = new SelectList(db.Localities.Where(c => c.LocalityId == selectedIndex), "LocalityId", "LocalityName");
-            
             ViewBag.Localities = flocalities;
             
             IQueryable<Item> items = db.Items.Include(p => p.Category).Include( l => l.Locality);
             
-            if (category != null && category != 0)
+            if (category != null && category != 1)
             {
                 items = items.Where(p => p.CategoryId == category);
             }
@@ -100,7 +80,7 @@ namespace Alia.Controllers
             {
                 items = items.Where(p => p.Description.Contains(name));
             }
-            if (locality != null && locality != 0)
+            if (locality != null && locality != 1)
             {
                 items = items.Where(p => p.LocalityId == locality);
             }
@@ -131,10 +111,6 @@ namespace Alia.Controllers
         }
         public ActionResult GetItems(int id)
         {
-            Region zerorid = new Region { RegionId = 0, RegionName = "All" };
-            db.Regions.Add(zerorid);
-            Locality zerolid = new Locality { LocalityId = 0, LocalityName = "All", RegionId = 0 };
-            db.Localities.Add(zerolid);
             return PartialView(db.Localities.Where(c => c.RegionId == id).ToList());
         }
 
@@ -182,7 +158,68 @@ namespace Alia.Controllers
             List<Category> categories = await db.Categories.ToListAsync();
             return View(item);
         }
+        public async Task<IActionResult> ItemReserve(int? id, string userId)
+        {
+            SelectList localities = new SelectList(db.Localities.ToList(), "LocalityId", "LocalityName");
+            ViewBag.Localities = localities;
+            SelectList category = new SelectList(db.Categories.ToList(), "CategoryId", "CategoryName");
+            ViewBag.Categories = category;
 
+            
+
+            if (id != null && userId != null)
+            {
+                Item item
+                    = await db.Items.FirstOrDefaultAsync(p => p.ItemId == id);
+                AspNetUser user = await db.AspNetUsers.FirstOrDefaultAsync(p => p.Id == userId);
+                if (item != null && user != null)
+                {
+                    MailReserve mailReserve = new MailReserve
+                    {
+                        ItemId = id,
+                        ItemName = item.ItemName
+
+                    };
+                    ItemReserveViewModel itemReserveViewModel = new ItemReserveViewModel
+                    {
+                        User = user,
+                        Item = item,
+                        MailReserve = mailReserve
+                    };
+                    return View(itemReserveViewModel);
+                }
+            }
+            return NotFound();
+        }
+        
+        [HttpPost]
+        public IActionResult ItemReserve(MailReserve mailReserve)
+        {
+            // отправитель - устанавливаем адрес и отображаемое в письме имя
+            MailAddress from = new MailAddress("beautykoteyko@gmail.com", mailReserve.UserName);
+            // кому отправляем
+            MailAddress to = new MailAddress("ellis.shybut@gmail.com");
+            // создаем объект сообщения
+            MailMessage m = new MailMessage(from, to);
+            // тема письма
+            m.Subject = "Booking Request";
+            // текст письма
+            string firstString = "item: " + mailReserve.ItemName + " " + mailReserve.ItemId.ToString() + "\n";
+            string secondString = "from: " + mailReserve.UserName + " " + mailReserve.UserId + "\n";
+            string thirdString = "phone number: " + mailReserve.PhoneNumber + "\n";
+            string fourthString = "message: " + mailReserve.Message + "\n";
+            m.Body = firstString + secondString + thirdString + fourthString;
+            // письмо представляет код html
+            m.IsBodyHtml = true;
+            // адрес smtp-сервера и порт, с которого будем отправлять письмо
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            // логин и пароль
+            smtp.Credentials = new NetworkCredential("beautykoteyko@gmail.com", "6739396koteyko");
+            smtp.EnableSsl = true;
+            smtp.Send(m);
+            return RedirectToAction("Item", "Home");
+        }
+        
     }
 
 }

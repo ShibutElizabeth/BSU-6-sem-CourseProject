@@ -3,27 +3,28 @@
     ViewBag.Title = Model.ItemName;
 }
 <div class="back-det">
-    <div class="container-det">
-        <div class="photo-det">
-            @if (Model.BigImageData != null)
-            {
-                <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.BigImageData))" alt="Card image cap" class="img-det" />
+    <form asp-action="ItemReserve" asp-controller="Home" method="get">
+        <div class="container-det">
+            <div class="photo-det">
+                @if (Model.BigImageData != null)
+                {
+                    <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.BigImageData))" alt="Card image cap" class="img-det" />
 
-            }
-        </div>
-        <div class="name-det">
-            <p class="h2-det margin-top-name">@Model.ItemName</p>
-            <textarea class="h3-det ta-back-deli margin-top-ta" rows="4" readonly>@Model.Description</textarea>
-            <p class="h2-det" style="text-align:right;"><strong>@Model.Price $</strong></p>
-        </div>
-        <div class="category-det">
-            <p class="h3-det"><span><img src="/css/img_new/category.png" width="20" /></span> @Model.Category.CategoryName</p>
-            <p class="h3-det margin-20"><span><img src="/css/img_new/location.png" width="20" /></span> @Model.Locality.LocalityName</p>
-            <div class="btn-det-block">
-                <button class="btn-det">Buy</button>
-                <button class="btn-det" >Reserve</button>
+                }
+            </div>
+            <div class="name-det">
+                <p class="h2-det margin-top-name">@Model.ItemName</p>
+                <textarea class="h3-det ta-back-deli margin-top-ta" rows="4" readonly>@Model.Description</textarea>
+                <p class="h2-det" style="text-align:right;"><strong>@Model.Price $</strong></p>
+            </div>
+            <div class="category-det">
+                <p class="h3-det"><span><img src="/css/img_new/category.png" width="20" /></span> @Model.Category.CategoryName</p>
+                <p class="h3-det margin-20"><span><img src="/css/img_new/location.png" width="20" /></span> @Model.Locality.LocalityName</p>
+                <div class="btn-det-block">
+                    
+                    <button type="submit" class="btn-det" asp-action="ItemReserve" asp-controller="Home" asp-route-id="@Model.ItemId" asp-route-userid="User.Identity">Reserve</button>
+                </div>
             </div>
         </div>
-    </div>
-    
+    </form>
 </div>

@@ -1,0 +1,33 @@
+﻿@model Alia.ViewModels.ItemReserveViewModel
+@{
+    ViewData["Title"] = "Booking request";
+}
+
+ 
+    <form class="back-res" asp-action="ItemReserve" asp-controller="Home" method="post">
+        <h2 class="p-res margin-20"></h2>
+        <div class="panel-res">
+            <button class="btn-res" ><img src="/css/img_new/view.png" width="80" /></button>
+            <div class="descr-1" id="d1">Какой-то текст который должен быть в блоке<br /></div>
+            <button class="btn-res"><img src="/css/img_new/faq.png" width="80" /></button>
+            <div class="descr-2" id="d2">Какой-то текст который должен быть в блоке<br></div>
+        </div>
+        <div class="container-res">
+            <div class="text-res">
+                <h2 class="p-res margin-20">Name</h2>
+                <h2 class="p-res margin-20">Phone number</h2>
+                <h2 class="p-res margin-20">E-mail</h2>
+                <h2 class="p-res margin-20">Your message</h2>
+            </div>
+            <div class="input-res">
+                <input asp-for="@Model.MailReserve.UserName" type="text" class="input-res-2 margin-20" placeholder="" name="UserName" required>
+                <input asp-for="@Model.MailReserve.PhoneNumber" type="text" class="input-res-2 margin-top-20" placeholder="" name="PhoneNumber" required pattern="\d{1,}">
+                <input asp-for="@Model.MailReserve.Email" type="email" class="input-res-2 margin-top-20" placeholder="" name="Email" required>
+                <input asp-for="@Model.MailReserve.Message" type="text" class="input-cri-desc" style="width: 520px; height:200px; margin-top: 20px;" placeholder="" name="Message">
+            </div>
+        </div>
+        <div class="btn-res-block">
+            <input type="submit" class="cri-button" style="margin-top: unset; margin-left:20px;" value="Send" asp-action="ItemReserve" asp-route-userid="@Model.User.Id">
+        </div>
+        
+    </form>

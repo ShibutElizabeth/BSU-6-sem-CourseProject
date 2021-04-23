@@ -49,23 +49,37 @@
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <li class="li-header dropdown">
-                        <a id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-                        <div class="dropdown-content" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="a-drop" asp-area="" asp-controller="Item" asp-action="ItemCreate">Create Item</a>
-                            <a class="a-drop" asp-area="" asp-controller="Item" asp-action="Items">Items</a>
-                            <a class="a-drop" asp-area="" asp-controller="Item" asp-action="Locality">Localities</a>
-                            <a class="a-drop"  asp-area="" asp-controller="Item" asp-action="Region">Regions</a>
-                            <a class="a-drop" asp-area="" asp-controller="Item" asp-action="Category">Categories</a>
-                            <a class="a-drop"  asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                            <a class="a-drop"  asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                            <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
-                                  <input type="submit" class="a-drop logout" value="Log out">
-                            </form>
-                        </div>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li class="li-header dropdown">
+                            <a id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                            <div class="dropdown-content" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="a-drop" asp-area="" asp-controller="Item" asp-action="ItemCreate">Create Item</a>
+                                <a class="a-drop" asp-area="" asp-controller="Item" asp-action="Items">Items</a>
+                                <a class="a-drop" asp-area="" asp-controller="Item" asp-action="Locality">Localities</a>
+                                <a class="a-drop" asp-area="" asp-controller="Item" asp-action="Region">Regions</a>
+                                <a class="a-drop" asp-area="" asp-controller="Item" asp-action="Category">Categories</a>
+                                <a class="a-drop" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                                <a class="a-drop" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
+                                    <input type="submit" class="a-drop logout" value="Log out">
+                                </form>
+                            </div>
 
-                    </li>
-                    
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="li-header dropdown">
+                            <a id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User</a>
+                            <div class="dropdown-content" aria-labelledby="navbarDropdownMenuLink">
+                                <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
+                                    <input type="submit" class="a-drop logout" value="Log out">
+                                </form>
+                            </div>
+
+                        </li>
+                    }
                 }
                 else
                 {

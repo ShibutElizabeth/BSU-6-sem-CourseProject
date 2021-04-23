@@ -59,10 +59,10 @@
                         <img src="/css/img_new/miniview/clothes1.png" alt="Portfolio Image">
                     </div>
                     <div class="work-content">
-                        <h3 class="h3-second-block">Clothes</h3>
+                        <h3 class="h3-second-block">Wardrobe</h3>
                         <p class="p-second-block">blablablablablabla</p>
                     </div>
-                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="5"></a>
+                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="4"></a>
                 </div>
             </li>
 
@@ -75,7 +75,7 @@
                         <h3 class="h3-second-block">Decoration</h3>
                         <p class="p-second-block">blablablablablabla</p>
                     </div>
-                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="4"></a>
+                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="5"></a>
                 </div>
             </li>
             <li class="li-second-block">
@@ -104,7 +104,7 @@
                         <h3 class="h3-second-block">Hobby</h3>
                         <p class="p-second-block">blablablablablabla</p>
                     </div>
-                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="9"></a>
+                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="8"></a>
                 </div>
             </li>
             <li class="li-second-block">
@@ -116,7 +116,7 @@
                         <h3 class="h3-second-block">Furniture</h3>
                         <p class="p-second-block">blablablablablabla</p>
                     </div>
-                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="2"></a>
+                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="7"></a>
                 </div>
             </li>
             <li class="li-second-block">
@@ -128,7 +128,7 @@
                         <h3 class="h3-second-block">Jewelry</h3>
                         <p class="p-second-block">blablablablablabla</p>
                     </div>
-                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="1"></a>
+                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="9"></a>
                 </div>
             </li>
         </ul>
@@ -145,7 +145,7 @@
                         <h3 class="h3-second-block">Equipment</h3>
                         <p class="p-second-block">blablablablablabla</p>
                     </div>
-                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="7"></a>
+                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="6"></a>
                 </div>
             </li>
             <li class="li-second-block">
@@ -157,7 +157,7 @@
                         <h3 class="h3-second-block">Utensil</h3>
                         <p class="p-second-block">blablablablablabla</p>
                     </div>
-                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="6"></a>
+                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="10"></a>
                 </div>
             </li>
             <li class="li-second-block">
@@ -169,7 +169,7 @@
                         <h3 class="h3-second-block">Another</h3>
                         <p class="p-second-block">blablablablablabla</p>
                     </div>
-                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="8"></a>
+                    <a class="content-wrapper-link" asp-controller="Home" asp-action="Item" asp-route-category="2"></a>
                 </div>
             </li>
         </ul>
@@ -178,11 +178,14 @@
 
 
 <div class="third-block" role="tabpanel">
-    <form class="form-third-block" asp-action="Item" asp-controller="Home" asp-route-name="@Model.FilterViewModel.Name"
+    <form class="form-third-block" asp-route-name="@Model.FilterViewModel.Name"
           asp-route-locality="@Model.FilterViewModel.SelectedLocality">
         @Html.TextBox("name", Model.FilterViewModel.Name, htmlAttributes: new { @class = "input", @placeholder = "key word" })
-        @Html.DropDownListFor(model => model.FilterViewModel.Localities, ViewBag.Localities as SelectList, htmlAttributes: new { @class = "select-block" })
-        <input type="submit" class="search-button" value="Search">
+        <select name="locality" asp-items="ViewBag.Localities" class="select-block" id="locality">
+        </select>
+        <input type="submit" class="search-button" value="Search" asp-action="Item" asp-controller="Home" formmethod="post">
+
     </form>
+   
 </div>
 

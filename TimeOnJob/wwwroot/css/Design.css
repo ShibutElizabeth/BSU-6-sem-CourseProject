@@ -1177,6 +1177,10 @@ div.desc {
     width: 15%;
 }
 
+.column-deli-4 a:hover{
+    opacity: 0.3;
+}
+
 .photo-deli {
     margin: 10px;
     height: 140px;
@@ -1608,5 +1612,123 @@ tbody tr:nth-child(even) {
 }
 .margin-top-20{
     margin-top: 15px;
+}
+
+
+/* --------------------------------------------------------------------------------- */
+
+/* ------------------------------NEW PAGE ReserveItem------------------------------- */
+
+.back-res{
+    background-image: url('img_new/BackBooking.jpg');
+    width: 1519px;
+    height:900px;
+    margin-left: -7px;
+    margin-top: -7px;
+}
+.container-res {
+    font-family: "Gabriola", Gabriola, serif;
+    padding-top: 220px;
+    display: grid;
+    grid-template-columns: 410px 200px 240px 240px;
+    grid-template-rows: auto;
+    column-gap: 30px;
+    grid-template-areas: ". text-res input-res ";
+}
+
+.item-card{
+    width: 320px;
+    height: 320px;
+    background-color:transparent;
+    grid-area: item-card;
+}
+.text-res {
+    width: 220px;
+    height: auto;
+    background-color: transparent;
+    grid-area: text-res;
+}
+.input-res {
+    padding-top: 20px;
+    width: 200px;
+    height: auto;
+    grid-area: input-res;
+}
+.message-res {
+    width: 360px;
+    height: 220px;
+    background-color: transparent;
+    
+}
+.p-res {
+    text-align: left;
+    font-size: 40px;
+    font-weight: 300;
+    font-family: "Gabriola", Gabriola, serif;
+    color: #3b5347;
+
+}
+.input-res-2 {
+    background-color: #ffffff;
+    color: #3b5347;
+    width: 240px;
+    height: 50px;
+    border-radius: 15px;
+    border-color: transparent;
+    font-family: "Gabriola", Gabriola, serif;
+    font-size: 40px;
+    font-weight: 300;
+    text-align: left;
+}
+
+.panel-res{
+    position: absolute;
+    margin-left: 300px;
+    margin-top: 260px;
+    vertical-align: middle;
+    width:70px;
+}
+.btn-res {
+    margin-top: 50px;
+    background-color: transparent;
+    border: none;
+    opacity: 0.3;
+    vertical-align: middle;
+}
+.btn-res:hover{
+    opacity: 1.0;
+
+}
+.btn-res-block{
+    display: inline-block;
+    margin-left:500px;
+    margin-top:20px;
+}
+.descr-1 {
+    width: 50px;
+    height: 50px;
+    display: none;
+    margin-left: 200px;
+    padding: 10px;
+    margin-top: 17px;
+    background: #f3f3f3;
+    height: 200px;
+    -moz-box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+}
+
+.descr-2 {
+    width: 50px;
+    height: 50px;
+    display: none;
+    margin-left: 200px;
+    padding: 10px;
+    margin-top: 17px;
+    background: #f3f3f3;
+    height: 200px;
+    -moz-box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 5px rgba(0,0,0,0.3);
 }
 

@@ -10,5 +10,9 @@ namespace Alia.Models
         public int RegionId { get; set; }
         public string RegionName { get; set; }
         public ICollection<Locality> Localities { get; set; }
+        public Region()
+        {
+            Localities = new List<Locality>();
+        }
     }
 }

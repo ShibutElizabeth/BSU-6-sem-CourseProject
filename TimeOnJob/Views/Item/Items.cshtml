@@ -34,7 +34,7 @@
                             <textarea class="h2-deli margin-40 ta-back-deli" readonly>@item.Description</textarea>
                         </div>
                         <div class="column-deli-3">
-                            <p class="h3-deli margin-2">@item.Price</p>
+                            <p class="h3-deli margin-2">@item.Price $</p>
                             <p class="h3-deli margin-20">@item.CreatedDate</p>
                             <p class="h3-deli margin-20"><span><img src="/css/img_new/category.png" width="10" /></span> @item.Category.CategoryName</p>
                             <p class="h3-deli margin-20"><span><img src="/css/img_new/location.png" width="10" /></span> @item.Locality.LocalityName</p>
@@ -42,33 +42,12 @@
                         <div class="column-deli-4">
                             <a asp-controller="Item" asp-action="ItemEdit" asp-route-id="@item.ItemId"><img src="/css/img_new/edit.png" width="20" style="line-height: 20px;"></a>
                             <a asp-controller="Item" asp-action="ItemDelete" asp-route-id="@item.ItemId"><img src="/css/img_new/delete.png" width="20" style="line-height: 20px;"></a>
-                            <a asp-controller="Item"asp-action="SetReserved" asp-route-id="@item.ItemId" asp-route-reserved="1" name="reserved" id="reserved"><img src="/css/img_new/userlist.png" width="20" style="line-height: 20px;"></a>
+                            <a asp-controller="Item" asp-action="SetReserved" asp-route-id="@item.ItemId" asp-route-reserved="1" name="reserved" ><img src="/css/img_new/res.png" width="20" style="line-height: 20px;"></a>
                         </div>
                     </div>
 
                 }
-            <script type="text/javascript">
-                    
-                    $(function () {
-                        $('#reserved').change(function()
-                        {
-                            // получаем выбранный id
-                            var res = $(this).checked;
-                            var c = 0;
-                            if (res) {
-                                c = 1;
-                            }
-                            var id = $('#itemid').val();
-                            $.ajax({
-                                type: 'GET',
-                                url: '@Url.Action("SetReserved")/' + c + id,
-                                success: function (data) {
-                                    
-                                }
-                            });
-                        });
-                    })
-            </script>
+            
                 <div class="form-filter-2">
                     <div class="block-27" style="position:absolute; margin-left: 230px; margin-top: 40px;">
 

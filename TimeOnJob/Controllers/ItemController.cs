@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+
 using Alia.Models;
 using Alia.ViewModels;
 
@@ -27,7 +28,6 @@ namespace Alia.Controllers
         IWebHostEnvironment _appEnvironment;
 
         private EFContext db;
-        Item editItem;
         public byte[] OIDC;
         public byte[] PIDC;
         public byte[] BIDC;
@@ -381,14 +381,9 @@ namespace Alia.Controllers
             {
                 item.Description = Description;
             }
-            if (LocalityId != null)
-            {
                 item.LocalityId = LocalityId;
-            }
-            if (CategoryId != null)
-            {
                 item.CategoryId = CategoryId;
-            }
+            
             db.Entry(item).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Items", "Item");
@@ -417,18 +412,11 @@ namespace Alia.Controllers
             List<Category> categories = await db.Categories.ToListAsync();
             if (id != null)
             {
-                /*NationalCuisine nationalCuisine = await db.NationalCuisine.FirstOrDefaultAsync(p => p.NationalCuisineId == id);
-                if (nationalCuisine != null)
-                {
-                    db.NationalCuisine.Remove(nationalCuisine);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("NationalCuisine");
-                }*/
                 
                 Item item = new Item { ItemId = id.Value };
                 db.Entry(item).State = EntityState.Deleted;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Items", "Item");//в отличии от предыдущего, этот метод - оптимизированный и с проверкой на существование записи в БД
+                return RedirectToAction("Items", "Item");//в отличиe от предыдущего, этот метод - оптимизированный и с проверкой на существование записи в БД
             }
             return NotFound();
         }
@@ -440,19 +428,11 @@ namespace Alia.Controllers
             string pfl = "";
 
             //Динамическая загрузка списка по выбору из другого списка
-            int selectedIndex = 0;
-            Region zerorid = new Region { RegionId = 0, RegionName = "All" };
-            db.Regions.Add(zerorid);
-            Locality zerolid = new Locality { LocalityId = 0, LocalityName = "All", RegionId = 0 };
-            db.Localities.Add(zerolid);
+            int selectedIndex = 1;
             SelectList fregions = new SelectList(db.Regions, "RegionId", "RegionName", selectedIndex);
-            //fregions = new SelectList(new string[] { "All" });
             ViewBag.Regions = fregions;
-            //new string[] {"Россия","США", "Китай","Индия"}
-            //fregions.(0, new Region { RegionId = 0, RegionName = "All"});
-            //ViewBag.Regions.Insert(0, new Region { RegionId = 0, RegionName = "All"});
             SelectList flocalities;
-            if (selectedIndex != 0)
+            if (selectedIndex != 1)
             {
                 flocalities = new SelectList(db.Localities.Where(c => c.LocalityId == selectedIndex), "LocalityId", "LocalityName");
             }
@@ -464,7 +444,7 @@ namespace Alia.Controllers
 
             IQueryable<Item> items = db.Items.Include(p => p.Category).Include(l => l.Locality);
 
-            if (category != null && category != 0)
+            if (category != null && category != 1)
             {
                 items = items.Where(p => p.CategoryId == category);
             }
@@ -472,7 +452,7 @@ namespace Alia.Controllers
             {
                 items = items.Where(p => p.Description.Contains(name));
             }
-            if (locality != null && locality != 0)
+            if (locality != null && locality != 1)
             {
                 items = items.Where(p => p.LocalityId == locality);
             }
@@ -501,40 +481,25 @@ namespace Alia.Controllers
 
             return View(viewModel);
         }
-        /*public async Task<IActionResult> Items(int page=1)
-        {
-            List<Locality> localities = await db.Localities.ToListAsync();
-            List<Category> categories = await db.Categories.ToListAsync();
-            int pageSize = 3;   // количество элементов на странице
-
-            IQueryable<Item> source = db.Items;
-            var count = await source.CountAsync();
-            var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-
-            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-            ItemListViewModel viewModel = new ItemListViewModel
-            {
-                PageViewModel = pageViewModel,
-                Items = items
-            };
-            return View(viewModel);
-            
-        }*/
         public ActionResult GetLocalities(int id)
         {
-            Region zerorid = new Region { RegionId = 0, RegionName = "All" };
-            db.Regions.Add(zerorid);
-            Locality zerolid = new Locality { LocalityId = 0, LocalityName = "All", RegionId = 0 };
-            db.Localities.Add(zerolid);
             return PartialView(db.Localities.Where(c => c.RegionId == id).ToList());
         }
         public ActionResult SetReserved(int reserved, int id)
         {
-            Item editItem = db.Items.Find(id);
-            
-            editItem.IsReserved = reserved;
-            db.Items.Update(editItem);
+            Item item = db.Items.FirstOrDefault(p => p.ItemId == id);
+            if(item.IsReserved == 0)
+            {
+                item.IsReserved = reserved;
+            }
+            else
+            {
+                item.IsReserved = 0;
+            }
+            db.Entry(item).State = EntityState.Modified;
+            db.SaveChanges();
             return RedirectToAction("Items", "Item");
         }
+        
     }
 }

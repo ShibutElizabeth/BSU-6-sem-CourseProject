@@ -20,7 +20,7 @@ namespace Alia.Models
         public byte[] PreviewImageData { get; set; }
         public decimal? Price { get; set; }
         public Locality Locality { get; set; }
-        //public Region Region { get; set; }
+        
         public Category Category { get; set; }
         public int IsReserved { get; set; }
        
