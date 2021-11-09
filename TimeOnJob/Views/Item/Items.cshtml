@@ -12,10 +12,10 @@
                 <form class="form-filter-2 center" asp-action="Items" asp-controller="Item" method="get">
 
                     @Html.DropDownList("category", Model.FilterViewModel.Categories, htmlAttributes: new { @class = "select-filter-2 " })
-                    <select name="locality" asp-items="ViewBag.Localities" class="select-filter-2 margin-50" id="locality">
+                    <select name="locality" asp-items="ViewBag.Localities" class="select-filter-2" id="locality">
                     </select>
-                    
-                    <input class="filter-button-2 margin-50" asp-controller="Item" asp-action="Items" formmethod="get" type="submit" value="Filter">
+
+                    <input class="filter-button-2" asp-controller="Item" asp-action="Items" formmethod="get" type="submit" value="Filter">
 
                 </form>
 
@@ -30,80 +30,83 @@
 
                         </div>
                         <div class="column-deli-2">
-                            <h3 class="h2-deli margin-2">@item.ItemName</h3>
+                            <h3 class="h2-deli margin-2"  id="itemid">@item.ItemName</h3>
                             <textarea class="h2-deli margin-40 ta-back-deli" readonly>@item.Description</textarea>
                         </div>
                         <div class="column-deli-3">
-                            <p class="h3-deli margin-2">@item.Price</p>
+                            <p class="h3-deli margin-2">@item.Price $</p>
                             <p class="h3-deli margin-20">@item.CreatedDate</p>
-
+                            <p class="h3-deli margin-20"><span><img src="/css/img_new/category.png" width="10" /></span> @item.Category.CategoryName</p>
+                            <p class="h3-deli margin-20"><span><img src="/css/img_new/location.png" width="10" /></span> @item.Locality.LocalityName</p>
                         </div>
                         <div class="column-deli-4">
                             <a asp-controller="Item" asp-action="ItemEdit" asp-route-id="@item.ItemId"><img src="/css/img_new/edit.png" width="20" style="line-height: 20px;"></a>
                             <a asp-controller="Item" asp-action="ItemDelete" asp-route-id="@item.ItemId"><img src="/css/img_new/delete.png" width="20" style="line-height: 20px;"></a>
+                            <a asp-controller="Item" asp-action="SetReserved" asp-route-id="@item.ItemId" asp-route-reserved="1" name="reserved" ><img src="/css/img_new/res.png" width="20" style="line-height: 20px;"></a>
                         </div>
                     </div>
 
                 }
-            <div class="form-filter-2">
-                <div class="block-27" style="position:absolute; margin-left: 230px; margin-top: 40px;">
+            
+                <div class="form-filter-2">
+                    <div class="block-27" style="position:absolute; margin-left: 230px; margin-top: 40px;">
 
-                    @if (Model.PageInfo.EndPage > 1)
-                    {
-                        <ul class="ul-pag">
-                            @if (Model.PageInfo.CurrentPage > 1)
-                            {
-                                <li class="prev-pag li-pag">
-                                    <page-link page="@(Model.PageInfo.CurrentPage-1)" action="Items"
-                                               category="@(Model.FilterViewModel.SelectedCategory)"
-                                               locality="@(Model.FilterViewModel.SelectedLocality)"
-                                               name="@(Model.FilterViewModel.Name)"
-                                               sort-view-model="@(Model.SortViewModel)">&lt</page-link>
-
-                                </li>
-                            }
-
-                            @for (var page = Model.PageInfo.StartPage; page <= Model.PageInfo.EndPage; page++)
-                            {
-                                @if (page == Model.PageInfo.CurrentPage)
+                        @if (Model.PageInfo.EndPage > 1)
+                        {
+                            <ul class="ul-pag">
+                                @if (Model.PageInfo.CurrentPage > 1)
                                 {
-                                    <li class="li-pag">
-                                        <page-link class="active" page="@(Model.PageInfo.CurrentPage)" action="Items"
+                                    <li class="prev-pag li-pag">
+                                        <page-link page="@(Model.PageInfo.CurrentPage-1)" action="Items"
                                                    category="@(Model.FilterViewModel.SelectedCategory)"
                                                    locality="@(Model.FilterViewModel.SelectedLocality)"
                                                    name="@(Model.FilterViewModel.Name)"
-                                                   sort-view-model="@(Model.SortViewModel)">@(page)</page-link>
+                                                   sort-view-model="@(Model.SortViewModel)">&lt</page-link>
+
                                     </li>
                                 }
-                                @if (page != Model.PageInfo.CurrentPage)
+
+                                @for (var page = Model.PageInfo.StartPage; page <= Model.PageInfo.EndPage; page++)
                                 {
-                                    <li class="li-pag">
-                                        <page-link page="@(page)" action="Items"
+                                    @if (page == Model.PageInfo.CurrentPage)
+                                    {
+                                        <li class="li-pag">
+                                            <page-link class="active" page="@(Model.PageInfo.CurrentPage)" action="Items"
+                                                       category="@(Model.FilterViewModel.SelectedCategory)"
+                                                       locality="@(Model.FilterViewModel.SelectedLocality)"
+                                                       name="@(Model.FilterViewModel.Name)"
+                                                       sort-view-model="@(Model.SortViewModel)">@(page)</page-link>
+                                        </li>
+                                    }
+                                    @if (page != Model.PageInfo.CurrentPage)
+                                    {
+                                        <li class="li-pag">
+                                            <page-link page="@(page)" action="Items"
+                                                       category="@(Model.FilterViewModel.SelectedCategory)"
+                                                       locality="@(Model.FilterViewModel.SelectedLocality)"
+                                                       name="@(Model.FilterViewModel.Name)"
+                                                       sort-view-model="@(Model.SortViewModel)">@(page)</page-link>
+                                        </li>
+                                    }
+                                }
+                                @if (Model.PageInfo.CurrentPage < Model.PageInfo.TotalPages)
+                                {
+                                    <li class="next-pag li-pag">
+                                        <page-link page="(Model.PageInfo.CurrentPage+1)" action="Items"
                                                    category="@(Model.FilterViewModel.SelectedCategory)"
                                                    locality="@(Model.FilterViewModel.SelectedLocality)"
                                                    name="@(Model.FilterViewModel.Name)"
-                                                   sort-view-model="@(Model.SortViewModel)">@(page)</page-link>
+                                                   sort-view-model="@(Model.SortViewModel)">&gt</page-link>
                                     </li>
                                 }
-                            }
-                            @if (Model.PageInfo.CurrentPage < Model.PageInfo.TotalPages)
-                            {
-                                <li class="next-pag li-pag">
-                                    <page-link page="(Model.PageInfo.CurrentPage+1)" action="Items"
-                                               category="@(Model.FilterViewModel.SelectedCategory)"
-                                               locality="@(Model.FilterViewModel.SelectedLocality)"
-                                               name="@(Model.FilterViewModel.Name)"
-                                               sort-view-model="@(Model.SortViewModel)">&gt</page-link>
-                                </li>
-                            }
-                        </ul>
-                    }
+                            </ul>
+                        }
+                    </div>
                 </div>
-            </div>
 
-               
+
             </div>
         </div>
-        
+
     </div>
 </div>

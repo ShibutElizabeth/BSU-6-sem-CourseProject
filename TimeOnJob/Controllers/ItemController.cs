@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+
 using Alia.Models;
 using Alia.ViewModels;
 
@@ -27,6 +28,9 @@ namespace Alia.Controllers
         IWebHostEnvironment _appEnvironment;
 
         private EFContext db;
+        public byte[] OIDC;
+        public byte[] PIDC;
+        public byte[] BIDC;
         public ItemController(EFContext context, UserManager<User> userManager, IConfiguration configuration, IWebHostEnvironment appEnvironment)
 
         {
@@ -280,7 +284,7 @@ namespace Alia.Controllers
         }
 
         [HttpPost]
-        public IActionResult ItemCreate(IFormFile uploadedFile, ItemViewModel jobvm)
+        public IActionResult ItemCreate(IFormFile uploadedFile, ItemViewModel itemvm)
         {
             using (SqlConnection connection = new SqlConnection(Configuration.GetConnectionString("DefaultConnection")))
             {
@@ -300,74 +304,42 @@ namespace Alia.Controllers
                         imgb.Mutate(ctx => ctx.Resize(new Size(900, 0)));
                         imgb.Save(path + "bigImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
                         byte[] spimgb = System.IO.File.ReadAllBytes(path + "bigImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
-                        jobvm.BIData = spimgb;
+                        itemvm.BIData = spimgb;
                     }
                     using (var imgp = Image.Load(path + shortFileName))
                     {
                         imgp.Mutate(ctxp => ctxp.Resize(new Size(180, 0)));
                         imgp.Save(path + "previewImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
                         byte[] spimgp = System.IO.File.ReadAllBytes(path + "previewImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
-                        jobvm.PIData = spimgp;
+                        itemvm.PIData = spimgp;
                     }
                     byte[] originalImageData = null;
                     using (var binaryReader = new BinaryReader(uploadedFile.OpenReadStream()))
                     {
                         originalImageData = binaryReader.ReadBytes((int)uploadedFile.Length);
                     }
-                    jobvm.OIData = originalImageData;
+                    itemvm.OIData = originalImageData;
                     Directory.Delete(path, true);
                 }
-                Item itemcreate = new Item { FileName = shortFileName };
-                itemcreate.ItemName = jobvm.ItemName;
-                itemcreate.Description = jobvm.Description;
-                //jobcreate.OriginalImageData = jobvm.OIData;
-                itemcreate.BigImageData = jobvm.BIData;
-                itemcreate.PreviewImageData = jobvm.PIData;
-                itemcreate.LocalityId = jobvm.LocalityId;
-                itemcreate.CategoryId = jobvm.CategoryId;
+                Item itemcreate = new Item { FileName = uploadedFile.FileName.ToString() };
+                itemcreate.ItemName = itemvm.ItemName;
+                itemcreate.Description = itemvm.Description;
+                itemcreate.OriginalImageData = itemvm.OIData;
+                itemcreate.BigImageData = itemvm.BIData;
+                itemcreate.PreviewImageData = itemvm.PIData;
+                itemcreate.LocalityId = itemvm.LocalityId;
+                itemcreate.CategoryId = itemvm.CategoryId;
                 itemcreate.UserId = _userManager.GetUserId(HttpContext.User);
                 itemcreate.CreatedDate = DateTime.Now;
-                itemcreate.Price = jobvm.Price;
+                itemcreate.Price = itemvm.Price;
+                
                 
                 db.Items.Add(itemcreate);
                 db.SaveChanges();
             }
             return RedirectToAction("Item", "Home");
         }
-        [HttpGet]
-        [ActionName("ItemDelete")]
-        public async Task<IActionResult> ConfirmItemDelete(int? id)
-        {
-            if (id != null)
-            {
-                Item item = await db.Items.FirstOrDefaultAsync(p => p.ItemId == id);
-                if (item != null)
-                    return View(item);
-            }
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> ItemDelete(int? id)
-        {
-            List<Locality> localities = await db.Localities.ToListAsync();
-            List<Category> categories = await db.Categories.ToListAsync();
-            if (id != null)
-            {
-                /*NationalCuisine nationalCuisine = await db.NationalCuisine.FirstOrDefaultAsync(p => p.NationalCuisineId == id);
-                if (nationalCuisine != null)
-                {
-                    db.NationalCuisine.Remove(nationalCuisine);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("NationalCuisine");
-                }*/
-                
-                Item item = new Item { ItemId = id.Value };
-                db.Entry(item).State = EntityState.Deleted;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Items", "Item");//в отличии от предыдущего, этот метод - оптимизированный и с проверкой на существование записи в БД
-            }
-            return NotFound();
-        }
+        
         public async Task<IActionResult> ItemEdit(int? id)
         {
             SelectList localities = new SelectList(db.Localities.ToList(), "LocalityId", "LocalityName");
@@ -379,96 +351,88 @@ namespace Alia.Controllers
             {
                 Item item
                     = await db.Items.FirstOrDefaultAsync(p => p.ItemId == id);
-                
+
                 if (item != null)
+                {
+                    OIDC = item.OriginalImageData;
+                    BIDC = item.BigImageData;
+                    PIDC = item.PreviewImageData;
+                    
                     return View(item);
+                }
+                    
             }
             return NotFound();
         }
-       
+        
         [HttpPost]
-        public async Task<IActionResult> ItemEdit(IFormFile uploadedFile, Item item)
+        public IActionResult ItemEdit(int? id, string ItemName, decimal? Price, string Description, int LocalityId, int CategoryId)
         {
-            Item editItem = db.Items.Find(item.ItemId);
-            List<Locality> localities = await db.Localities.ToListAsync();
-            List<Category> categories = await db.Categories.ToListAsync();
-            if (uploadedFile != null)
+            Item item= db.Items.FirstOrDefault(p => p.ItemId == id);
+            if(ItemName != null)
             {
-
-                
-                Directory.CreateDirectory(_appEnvironment.WebRootPath + "/Temp/");
-                // путь к папке Temp
-                string path = _appEnvironment.WebRootPath + "/Temp/";
-                string shortFileName = uploadedFile.FileName.Substring(uploadedFile.FileName.LastIndexOf('\\') + 1);
-                
-                editItem.FileName = shortFileName;
-
-                using (var fileStream = new FileStream(path + shortFileName, FileMode.Create))
-                {
-                    uploadedFile.CopyTo(fileStream);
-                }
-                byte[] spimgb = null;
-                using (var imgb = Image.Load(path + shortFileName))
-                {
-                    imgb.Mutate(ctx => ctx.Resize(new Size(900, 0)));
-                    imgb.Save(path + "bigImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
-                    spimgb = System.IO.File.ReadAllBytes(path + "bigImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
-                    item.BigImageData = spimgb;
-                }
-                byte[] spimgp = null;
-                using (var imgp = Image.Load(path + shortFileName))
-                {
-                    imgp.Mutate(ctxp => ctxp.Resize(new Size(180, 0)));
-                    imgp.Save(path + "previewImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
-                    spimgp = System.IO.File.ReadAllBytes(path + "previewImage_" + _userManager.GetUserName(HttpContext.User) + "_" + shortFileName);
-                    item.PreviewImageData = spimgp;
-                }
-                byte[] originalImageData = null;
-                using (var binaryReader = new BinaryReader(uploadedFile.OpenReadStream()))
-                {
-                    originalImageData = binaryReader.ReadBytes((int)uploadedFile.Length);
-                }
-                item.OriginalImageData = originalImageData;
-                Directory.Delete(path, true);
-
-                editItem.ItemName = item.ItemName;
-                editItem.Description = item.Description;
-                editItem.Price = item.Price;
-                editItem.BigImageData = spimgb;
-                editItem.PreviewImageData = spimgp;
-
-                db.Items.Update(editItem);
-                await db.SaveChangesAsync();
+                item.ItemName = ItemName;
             }
-            else
+            if(Price != null)
             {
-                editItem.ItemName = item.ItemName;
-                editItem.Price = item.Price;
-                editItem.Description = item.Description;
-
-                db.Items.Update(editItem);
-                await db.SaveChangesAsync();
+                item.Price = Price;
             }
+            if(Description != null)
+            {
+                item.Description = Description;
+            }
+                item.LocalityId = LocalityId;
+                item.CategoryId = CategoryId;
+            
+            db.Entry(item).State = EntityState.Modified;
+            db.SaveChanges();
             return RedirectToAction("Items", "Item");
         }
+        [HttpGet]
+        [ActionName("ItemDelete")]
+        public async Task<IActionResult> ConfirmItemDelete(int? id)
+        {
+            if (id != null)
+            {
+                Item item = await db.Items.FirstOrDefaultAsync(p => p.ItemId == id);
+                if (item != null)
+                {
+                    db.Entry(item).State = EntityState.Deleted;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Items", "Item");
+                }
+                    
+            }
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ItemDelete(int? id)
+        {
+            List<Locality> localities = await db.Localities.ToListAsync();
+            List<Category> categories = await db.Categories.ToListAsync();
+            if (id != null)
+            {
+                
+                Item item = new Item { ItemId = id.Value };
+                db.Entry(item).State = EntityState.Deleted;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Items", "Item");//в отличиe от предыдущего, этот метод - оптимизированный и с проверкой на существование записи в БД
+            }
+            return NotFound();
+        }
+        
+       
+       
         public IActionResult Items(int? category, int? locality, string name, int? page, SortState sortOrder)
         {
             string pfl = "";
 
             //Динамическая загрузка списка по выбору из другого списка
-            int selectedIndex = 0;
-            Region zerorid = new Region { RegionId = 0, RegionName = "All" };
-            db.Regions.Add(zerorid);
-            Locality zerolid = new Locality { LocalityId = 0, LocalityName = "All", RegionId = 0 };
-            db.Localities.Add(zerolid);
+            int selectedIndex = 1;
             SelectList fregions = new SelectList(db.Regions, "RegionId", "RegionName", selectedIndex);
-            //fregions = new SelectList(new string[] { "All" });
             ViewBag.Regions = fregions;
-            //new string[] {"Россия","США", "Китай","Индия"}
-            //fregions.(0, new Region { RegionId = 0, RegionName = "All"});
-            //ViewBag.Regions.Insert(0, new Region { RegionId = 0, RegionName = "All"});
             SelectList flocalities;
-            if (selectedIndex != 0)
+            if (selectedIndex != 1)
             {
                 flocalities = new SelectList(db.Localities.Where(c => c.LocalityId == selectedIndex), "LocalityId", "LocalityName");
             }
@@ -480,7 +444,7 @@ namespace Alia.Controllers
 
             IQueryable<Item> items = db.Items.Include(p => p.Category).Include(l => l.Locality);
 
-            if (category != null && category != 0)
+            if (category != null && category != 1)
             {
                 items = items.Where(p => p.CategoryId == category);
             }
@@ -488,7 +452,7 @@ namespace Alia.Controllers
             {
                 items = items.Where(p => p.Description.Contains(name));
             }
-            if (locality != null && locality != 0)
+            if (locality != null && locality != 1)
             {
                 items = items.Where(p => p.LocalityId == locality);
             }
@@ -517,33 +481,25 @@ namespace Alia.Controllers
 
             return View(viewModel);
         }
-        /*public async Task<IActionResult> Items(int page=1)
-        {
-            List<Locality> localities = await db.Localities.ToListAsync();
-            List<Category> categories = await db.Categories.ToListAsync();
-            int pageSize = 3;   // количество элементов на странице
-
-            IQueryable<Item> source = db.Items;
-            var count = await source.CountAsync();
-            var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-
-            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-            ItemListViewModel viewModel = new ItemListViewModel
-            {
-                PageViewModel = pageViewModel,
-                Items = items
-            };
-            return View(viewModel);
-            
-        }*/
         public ActionResult GetLocalities(int id)
         {
-            Region zerorid = new Region { RegionId = 0, RegionName = "All" };
-            db.Regions.Add(zerorid);
-            Locality zerolid = new Locality { LocalityId = 0, LocalityName = "All", RegionId = 0 };
-            db.Localities.Add(zerolid);
             return PartialView(db.Localities.Where(c => c.RegionId == id).ToList());
         }
-
+        public ActionResult SetReserved(int reserved, int id)
+        {
+            Item item = db.Items.FirstOrDefault(p => p.ItemId == id);
+            if(item.IsReserved == 0)
+            {
+                item.IsReserved = reserved;
+            }
+            else
+            {
+                item.IsReserved = 0;
+            }
+            db.Entry(item).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Items", "Item");
+        }
+        
     }
 }

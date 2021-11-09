@@ -6,16 +6,15 @@
         <div class="back-tbl center" style="margin-top: 30px;">
             <form asp-action="Edit" asp-controller="Users" class="form-filter-2">
                 <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="filter-block-3">
-                    <input type="hidden" asp-for="Id" />
-                </div>
-                <div class="filter-block-3">
-                    <label asp-for="UserName" class="text-top">UserName</label>
-                    <input type="text" asp-for="UserName" class="input-filter-2" />
-                </div>
-                <div class="filter-block-3">
-                    <label asp-for="Email" class="text-top">Email</label>
-                    <input type="text" asp-for="Email" class="input-filter-2" />
+                <div class="container-user-cr">
+                    <div class="text-user-cr">
+                        <label asp-for="UserName" class="text-top">UserName</label>
+                        <label asp-for="Email" class="text-top">Email</label>
+                    </div>
+                    <div class="input-user-cr">
+                        <input type="text" asp-for="UserName" class="input-filter-2" name="UserName"/>
+                        <input type="text" asp-for="Email" class="input-filter-2 margin-top-20" name="Email" />
+                    </div>
                 </div>
                 <div class="filter-block-3">
                     <button type="submit" class="filter-button-2">Save</button>

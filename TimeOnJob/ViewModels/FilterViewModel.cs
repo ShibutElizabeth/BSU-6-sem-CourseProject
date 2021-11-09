@@ -19,8 +19,6 @@ namespace Alia.ViewModels
         public FilterViewModel(List<Category> categories, int? category, int? locality, string name, List<Locality> localities)
         {
             // устанавливаем начальный элемент, который позволит выбрать всех
-            categories.Insert(0, new Category { CategoryName = "All", CategoryId = 0 });
-            localities.Insert(0, new Locality { LocalityName = "All", LocalityId = 0, RegionId = 0 });
             Categories = new SelectList(categories, "CategoryId", "CategoryName");
             Localities = new SelectList(localities, "LocalityId", "LocalityName");
             Name = name;

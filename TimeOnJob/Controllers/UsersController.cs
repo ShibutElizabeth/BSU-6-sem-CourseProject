@@ -58,17 +58,22 @@ namespace Alia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditUserViewModel model)
+        public async Task<IActionResult> Edit(EditUserViewModel model,string UserName, string Email)
         {
             if (ModelState.IsValid)
             {
                 User user = await _userManager.FindByIdAsync(model.Id);
                 if (user != null)
                 {
-                    user.Email = model.Email;
-                    user.UserName = model.UserName;
-                    //user.Year = model.Year;
-
+                    if(Email != null)
+                    {
+                        user.Email = Email;
+                    }
+                    if(UserName != null)
+                    {
+                        user.UserName = UserName;
+                    }
+ 
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {

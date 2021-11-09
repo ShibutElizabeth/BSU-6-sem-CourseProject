@@ -10,6 +10,6 @@ namespace Alia.Models
         public int LocalityId { get; set; }
         public string LocalityName { get; set; }
         public int RegionId { get; set; }
-        public Region Region { get; set; }//for adding products to recipe
+        public Region Region { get; set; }
     }
 }
