@@ -12,15 +12,21 @@ using Alia.Models;
 using Alia.ViewModels;
 using System.Net.Mail;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using System.Text;
 
 namespace Alia.Controllers
 {
     public class HomeController : Controller
     {
         private EFContext db;
-        public HomeController(EFContext context)
+        private readonly UserManager<User> _userManager;
+        public HomeController(EFContext context, UserManager<User> userManager)
         {
             db = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index(int? category, int? locality, string name)
@@ -158,7 +164,8 @@ namespace Alia.Controllers
             List<Category> categories = await db.Categories.ToListAsync();
             return View(item);
         }
-        public async Task<IActionResult> ItemReserve(int? id, string userId)
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> ItemReserve(int? id)
         {
             SelectList localities = new SelectList(db.Localities.ToList(), "LocalityId", "LocalityName");
             ViewBag.Localities = localities;
@@ -167,12 +174,12 @@ namespace Alia.Controllers
 
             
 
-            if (id != null && userId != null)
+            if (id != null)
             {
                 Item item
                     = await db.Items.FirstOrDefaultAsync(p => p.ItemId == id);
-                AspNetUser user = await db.AspNetUsers.FirstOrDefaultAsync(p => p.Id == userId);
-                if (item != null && user != null)
+                
+                if (item != null)
                 {
                     MailReserve mailReserve = new MailReserve
                     {
@@ -180,9 +187,11 @@ namespace Alia.Controllers
                         ItemName = item.ItemName
 
                     };
+                    string? userId = _userManager.GetUserId(HttpContext.User);
+                    AspNetUser currentUser = await db.AspNetUsers.FirstOrDefaultAsync(p => p.Id == userId);
                     ItemReserveViewModel itemReserveViewModel = new ItemReserveViewModel
                     {
-                        User = user,
+                        User = currentUser,
                         Item = item,
                         MailReserve = mailReserve
                     };
@@ -204,13 +213,17 @@ namespace Alia.Controllers
             // тема письма
             m.Subject = "Booking Request";
             // текст письма
+            
             string firstString = "item: " + mailReserve.ItemName + " " + mailReserve.ItemId.ToString() + "\n";
-            string secondString = "from: " + mailReserve.UserName + " " + mailReserve.UserId + "\n";
+            string secondString = "from: " + mailReserve.UserName + " " + mailReserve.Email + "\n";
             string thirdString = "phone number: " + mailReserve.PhoneNumber + "\n";
             string fourthString = "message: " + mailReserve.Message + "\n";
-            m.Body = firstString + secondString + thirdString + fourthString;
-            // письмо представляет код html
-            m.IsBodyHtml = true;
+            StringBuilder sb = new StringBuilder(firstString);
+            sb.AppendLine(secondString);
+            sb.AppendLine(thirdString);
+            sb.AppendLine(fourthString);
+            m.Body = sb.ToString();
+            
             // адрес smtp-сервера и порт, с которого будем отправлять письмо
             SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
             // логин и пароль

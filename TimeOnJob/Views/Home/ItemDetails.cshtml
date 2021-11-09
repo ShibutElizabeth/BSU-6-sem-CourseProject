@@ -22,7 +22,7 @@
                 <p class="h3-det margin-20"><span><img src="/css/img_new/location.png" width="20" /></span> @Model.Locality.LocalityName</p>
                 <div class="btn-det-block">
                     
-                    <button type="submit" class="btn-det" asp-action="ItemReserve" asp-controller="Home" asp-route-id="@Model.ItemId" asp-route-userid="User.Identity">Reserve</button>
+                    <button type="submit" class="btn-det" asp-action="ItemReserve" asp-controller="Home" asp-route-id="@Model.ItemId" asp-route-userid="@User.Identity">Reserve</button>
                 </div>
             </div>
         </div>

@@ -15,15 +15,16 @@ namespace Alia.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<AspNetUser> AspNetUsers { get; set; }
 
-        //не только для того что бы создавались таблицы, но и для того что бы asp.net знал связи
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-           
-        }
-
+        
         public EFContext(DbContextOptions<EFContext> options)
                 : base(options)
         {
+        }
+
+        //не только для того что бы создавались таблицы, но и для того что бы asp.net знал связи
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
         }
 
     }
